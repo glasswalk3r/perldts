@@ -8,7 +8,8 @@ my %config = (
         'Class::Accessor' => 0.25,
         'Hash::Util'      => 0.05,
         'Win32::OLE'      => 0.1704,
-        'Carp'            => 1.04
+        'Carp'            => 1.04,
+		'DateTime'        => 0.39
     },
     (
         $] >= 5.005

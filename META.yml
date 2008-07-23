@@ -7,6 +7,7 @@ installdirs:  site
 requires:
     Carp:                          1.04
     Class::Accessor:               0.25
+    DateTime:                      0.39
     Hash::Util:                    0.05
     Win32::OLE:                    0.1704
 

@@ -14,7 +14,7 @@ To install this module type the following:
 
 ENABLING EXTENDED TESTS
 
-Extended tests that will connect to a MS SQL Server database to fetch DTS package
+Extended tests will connect to a MS SQL Server database to fetch DTS package
 information and therefore tests the methods.
 
 Enabling extended test is a good idea: in fact, executing only the simple tests
@@ -23,7 +23,7 @@ to extended or modify the DTS API, is a very good idea to enable extended tests.
 
 To enable the extended tests is necessary to:
 
-1 - Save the DTS package sample ("test-all.dts") that comes with the module tarball in the database.
+1 - Save the DTS package sample ("test_all.dts") that comes with the module tarball in the database.
 2 - Edit the XML file "test-config.xml". If your server uses trusted method to authenticate 
 then the only thing that needs to be edit is the servername. Otherwise, add the 
 <user>user</user> and <password>password</password> inside the "credential" tag. Of course, 
@@ -32,7 +32,7 @@ you are able to use a XML validator.
 
 DEPENDENCIES
 
-This module requires these other modules and libraries:
+This module requires these other modules to work:
 
 - Carp
 - Class::Accessor

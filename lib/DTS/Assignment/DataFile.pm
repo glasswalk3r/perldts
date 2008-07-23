@@ -1,36 +1,5 @@
 package DTS::Assignment::DataFile;
 
-use 5.008008;
-use strict;
-use warnings;
-use base qw(DTS::Assignment);
-use Hash::Util qw(lock_keys);
-
-our $VERSION = '0.01';
-
-sub new {
-
-    my $class = shift;
-    my $self  = $class->SUPER::new(@_);
-
-    $self->{source} = $self->get_sibling->SourceDataFileFileName;
-
-    lock_keys( %{$self} );
-
-    return $self;
-
-}
-
-sub get_source {
-
-    my $self = shift;
-    return $self->{source};
-
-}
-
-1;
-__END__
-
 =head1 NAME
 
 DTS::Assignment::DataFile - a class to represent a DTS DynamicPropertiesTaskAssignment object
@@ -75,17 +44,54 @@ returned by the C<get_properties> method from C<DTS::Task::DynamicProperty> clas
 
 =head2 EXPORT
 
-None by default.
+Nothing.
+
+=cut
+
+use 5.008008;
+use strict;
+use warnings;
+use base qw(DTS::Assignment);
+use Hash::Util qw(lock_keys);
+
+our $VERSION = '0.02';
 
 =head2 METHODS
 
 Inherits all methods from C<DTS::Assignment>.
+
+=cut
+
+sub new {
+
+    my $class = shift;
+    my $self  = $class->SUPER::new(@_);
+
+    $self->{source} = $self->get_sibling->SourceDataFileFileName;
+
+    lock_keys( %{$self} );
+
+    return $self;
+
+}
 
 =head3 get_source
 
 Overrided method from L<DTS::Assignment|DTS::Assignment> class. Returns a string containing the complete pathname
 plus filename from where the value will be fetched to set a destination. See 
 L<DTS::Assignment|DTS::Assigment/get_destination> method for more information.
+
+=cut
+
+sub get_source {
+
+    my $self = shift;
+    return $self->{source};
+
+}
+
+1;
+__END__
 
 =head1 SEE ALSO
 
@@ -105,7 +111,7 @@ object hierarchy, but one will need to convert examples written in VBScript to P
 
 =head1 AUTHOR
 
-Alceu Rodrigues de Freitas Junior, E<lt>glasswalk3r@yahoo.com.brE<gt>
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -114,6 +120,5 @@ Copyright (C) 2006 by Alceu Rodrigues de Freitas Junior
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
-
 
 =cut

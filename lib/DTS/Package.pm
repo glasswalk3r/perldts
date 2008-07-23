@@ -1,9 +1,33 @@
 package DTS::Package;
 
+=head1 NAME
+
+DTS::Package - a Perl class to access Microsoft SQL Server 2000 DTS Packages 
+
+=head1 SYNOPSIS
+
+  use DTS::Package;
+
+	# $OLE_package is an already instantied class using Win32::OLE
+	my $package = DTS::Package->new( $OLE_package );
+
+	# prints the custom task name
+	print $custom_task->get_name, "\n";
+
+=head1 DESCRIPTION
+
+C<DTS::Package> is an class created to be used as a layer that represent a package object in DTS packages.
+
+=head2 EXPORT
+
+Nothing.
+
+=cut
+
 use 5.008008;
 use strict;
 use warnings;
-use Carp;
+use Carp qw(confess);
 use base qw(Class::Accessor DTS);
 use DTS::TaskFactory;
 use DTS::Connection;
@@ -11,16 +35,18 @@ use Win32::OLE qw(in);
 use Win32::OLE::Variant;
 use DateTime;
 use Hash::Util qw(lock_keys);
+use File::Spec;
 
-# :WARNING:22/11/2006:ARFjr: this API is incomplete. There are much more properties defined in the
-# SQL Server API
-
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(
     qw(creation_date creator_computer description log_file max_steps name id priority version_id )
 );
+
+=head2 METHODS
+
+=cut
 
 sub _init_creation_date {
 
@@ -38,6 +64,13 @@ sub _init_creation_date {
 
 }
 
+=head3 log_to_server
+
+Returns true or false (in Perl terms, this means 1 or 0 respectivally) if the "Log package execution to SQL Server" is 
+set.
+
+=cut
+
 sub log_to_server {
 
     my $self = shift;
@@ -45,12 +78,29 @@ sub log_to_server {
 
 }
 
+=head3 auto_commit
+
+Returns true or false (in Perl terms, this means 1 or 0 respectivally) if the "Auto Commit Transaction property" is set.
+
+=cut
+
 sub auto_commit {
 
     my $self = shift;
     return $self->{auto_commit};
 
 }
+
+=head3 new
+
+Expects a DTS.Package2 object as a parameter and returns a new C<DTS::Package> object.
+
+Not all properties from a DTS.Package2 will be available, specially the inner objects inside a DTS package will
+be available only at execution of the respective methods. These methods may depend on the C<_sibling> attribute,
+so one should not remove it before invoking those methods. The documentation tells where the method depends or
+not on C<_sibling> attribute.
+
+=cut
 
 sub new {
 
@@ -85,6 +135,12 @@ sub new {
 
 }
 
+=head3 use_explicit_global_vars
+
+Returns true if the property "Explicit Global Variables" is set. Otherwise returns false.
+
+=cut
+
 sub use_explicit_global_vars {
 
     my $self = shift;
@@ -92,12 +148,24 @@ sub use_explicit_global_vars {
 
 }
 
+=head3 use_event_log
+
+Returns true if the property "Write completation status to event log" is set. Otherwise returns false.
+
+=cut
+
 sub use_event_log {
 
     my $self = shift;
     return $self->{nt_event_log};
 
 }
+
+=head3 fail_on_error
+
+Returns true if the property "Fail package on first error" is set. Otherwise returns false.
+
+=cut
 
 sub fail_on_error {
 
@@ -157,12 +225,24 @@ sub _set_lineage_opts {
 
 }
 
+=head3 add_lineage_vars
+
+Returns true or false (1 or 0 respectivally) if the Add Lineage Variables property is set.
+
+=cut
+
 sub add_lineage_vars {
 
     my $self = shift;
     return $self->{add_lineage_vars};
 
 }
+
+=head3 is_lineage_none
+
+Returns true if provide no lineage (default) or false otherwise.
+
+=cut
 
 sub is_lineage_none {
 
@@ -171,6 +251,12 @@ sub is_lineage_none {
 
 }
 
+=head3 is_repository
+
+Returns true or false if the package will write to Meta Data Services if available.
+
+=cut
+
 sub is_repository {
 
     my $self = shift;
@@ -178,12 +264,29 @@ sub is_repository {
 
 }
 
+=head3 is_repository_required
+
+Returns true or false if writing to Meta Data Services is required.
+
+=cut
+
 sub is_repository_required {
 
     my $self = shift;
     return $self->{is_repository_required};
 
 }
+
+=head3 to_string
+
+Returns a string will all properties from the package, separated with new line characters. Each property also has
+a text with a sort description of the property.
+
+This method will not fetch automatically the properties from objects inside the package, line connections and
+tasks. Each object must be fetched first using the apropriated method and them invoking the C<to_string> from each
+object.
+
+=cut
 
 sub to_string {
 
@@ -228,6 +331,15 @@ sub to_string {
 
 }
 
+=head3 get_connections
+
+Returns an array reference with all connections objects available inside the package.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
+
 sub get_connections {
 
     my $self = shift;
@@ -242,6 +354,18 @@ sub get_connections {
     return \@connections_list;
 
 }
+
+=head3 count_connections
+
+Return an integer that represents the total amount of connections available in the package object.
+
+Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
+looping over the references in the array reference.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
 
 sub count_connections {
 
@@ -258,6 +382,19 @@ sub count_connections {
 
 }
 
+=head3 get_tasks
+
+Returns an array reference with all tasks available in the package.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+B<Warning:> C<get_tasks> method will abort with an error message if the DTS package has tasks that are not available
+as subclasses of C<DTS::Task> class. In doubt, use the available methods to fetch only the supported tasks. This 
+should be "fixed" in future releases with the implementation of the missing classes.
+
+=cut
+
 sub get_tasks {
 
     my $self = shift;
@@ -272,6 +409,18 @@ sub get_tasks {
     return \@tasks_list;
 
 }
+
+=head3 count_tasks
+
+Returns a integer with the number of tasks available inside the package.
+
+Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
+looping over the references in the array reference.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
 
 sub count_tasks {
 
@@ -318,12 +467,33 @@ sub _count_tasks_by_type {
 
 }
 
+=head3 count_datapumps
+
+Returns an integer represents the total amount of C<DataPumpTask> tasks available in the package.
+
+Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
+looping over the references in the array reference.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
+
 sub count_datapumps {
 
     my $self = shift;
     return $self->_count_tasks_by_type('DTSDataPumpTask');
 
 }
+
+=head3 get_datapumps
+
+Returns an array reference with all the C<DataPumpTasks> tasks available in the package.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
 
 sub get_datapumps {
 
@@ -332,12 +502,33 @@ sub get_datapumps {
 
 }
 
+=head3 count_dynamic_props
+
+Returns an integer represents the total amount of C<DynamicPropertiesTask> tasks available in the package.
+
+Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
+looping over the references in the array reference.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
+
 sub count_dynamic_props {
 
     my $self = shift;
     return $self->_count_tasks_by_type('DTSDynamicPropertiesTask');
 
 }
+
+=head3 get_dynamic_props
+
+Returns an array reference with all the C<DynamicPropertiesTask> tasks available in the package.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
 
 sub get_dynamic_props {
 
@@ -346,12 +537,33 @@ sub get_dynamic_props {
 
 }
 
+=head3 get_execute_pkgs
+
+Returns an array reference with all the C<ExecutePackageTask> tasks available in the package.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
+
 sub get_execute_pkgs {
 
     my $self = shift;
     return $self->_get_tasks_by_type('DTSExecutePackageTask');
 
 }
+
+=head3 count_execute_pkgs
+
+Returns an integer with the total of C<ExecutePackageTask> tasks available in the package.
+
+Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
+looping over the references in the array reference.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
 
 sub count_execute_pkgs {
 
@@ -360,11 +572,32 @@ sub count_execute_pkgs {
 
 }
 
+=head3 get_send_emails
+
+Returns an array reference with all the C<SendMailTask> tasks available in the package.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
+
 sub get_send_emails {
     my $self = shift;
     return $self->_get_tasks_by_type('DTSSendMailTask');
 
 }
+
+=head3 count_send_emails
+
+Returns an integer with the total of C<SendMailTask> tasks available in the package.
+
+Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
+looping over the references in the array reference.
+
+This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
+after invoking the C<kill_sibling> method.
+
+=cut
 
 sub count_send_emails {
 
@@ -373,47 +606,105 @@ sub count_send_emails {
 
 }
 
+=head3 save_to_server
+
+Saves the package to a SQL Server. This method must be called if the DTS::Package was modified (or it's inner object 
+were).
+
+Expectes a L<DTS::Credential|DTS::Credential> object as a parameter. If the Package will be saved in the same server
+from where it was fetched it's useful to use the method C<get_credential> from the L<DTS::Application|DTS::Application> 
+object.
+
+The optional parameters:
+
+=over
+
+=item *
+PackageOwnerPassword
+
+=item *
+PackageOperatorPassword
+
+=item *
+PackageCategoryID
+
+=item *
+pVarPersistStgOfHost
+
+=item *
+bReusePasswords
+
+=back
+
+from the original DTS API are not implemented.
+
+=cut
+
+sub save_to_server {
+
+    my $self       = shift;
+    my $credential = shift;
+
+    confess "invalid credential parameter"
+      unless ( $credential->isa('DTS::Credential') );
+
+    $self->get_sibling()->SaveToSQLServer( $credential->to_list() );
+
+    confess 'could not save the packate to a SQL Server: '
+      . Win32::OLE->LastError()
+      if ( Win32::OLE->LastError() );
+
+}
+
+=head3 save_to_file
+
+Saves the package to a structured file.
+
+Expects a complete pathname as a parameter. If a DTS structure filename is not passed together with the path,
+the method will use the package name followed by a '.dts' extension.
+
+The optional parameters:
+
+=over
+
+=item *
+OwnerPassword
+
+=item *
+OperatorPassword
+
+=item *
+pVarPersistStgOfHost
+
+=item *
+bReusePasswords
+
+=back
+
+from the original DTS API are not implemented.
+
+=cut
+
+sub save_to_file {
+
+    my $self = shift;
+    my $path = shift;
+    my $file = shift;
+
+    confess "invalid complete pathname parameter" unless ( defined($path) );
+
+    $file = $self->get_name() . '.dts' unless ( defined($file) );
+
+    $path = File::Spec->catfile( $path, $file );
+    $self->get_sibling()->SaveToStorageFile($path);
+
+    confess "could not save '$path': " . Win32::OLE->LastError()
+      if ( Win32::OLE->LastError() );
+
+}
+
 1;
 __END__
-
-=head1 NAME
-
-DTS::Package - a Perl class to access Microsoft SQL Server 2000 DTS Packages 
-
-=head1 SYNOPSIS
-
-  use DTS::Package;
-
-	# $OLE_package is an already instantied class using Win32::OLE
-	my $package = DTS::Package->new( $OLE_package );
-
-	# prints the custom task name
-	print $custom_task->get_name, "\n";
-
-=head1 DESCRIPTION
-
-C<DTS::Package> is an class created to be used as a layer that represent a package object in DTS packages.
-Although it's possible to use all features here by using only L<Win32::OLE|Win32::OLE> module, C<DTS::Package>
-provides a much easier interface (pure Perl) and (hopefully) a better documentation.
-
-=head2 EXPORT
-
-None by default.
-
-=head2 METHODS
-
-=head3 new
-
-Expects a DTS.Package2 object as a parameter and returns a new C<DTS::Package> object.
-
-Not all properties from a DTS.Package2 will be available, specially the inner objects inside a DTS package will
-be available only at execution of the respective methods. These methods may depend on the C<_sibling> attribute,
-so one should not remove it before invoking those methods. The documentation tells where the method depends or
-not on C<_sibling> attribute.
-
-=head3 auto_commit
-
-Returns true or false (in Perl terms, this means 1 or 0 respectivally) if the Auto Commit Transaction property is set.
 
 =head3 get_creation_date
 
@@ -456,136 +747,9 @@ Returns a string with the priority of the package ('High', 'Low' or 'Normal').
 
 Returns a string with the version ID of the package.
 
-=head3 add_lineage_vars
+=head2 CAVEATS
 
-Returns true or false (1 or 0 respectivally) if the Add Lineage Variables property is set.
-
-=head3 is_lineage_none
-
-Returns true if provide no lineage (default) or false otherwise.
-
-=head3 is_repository
-
-Returns true or false if the package will write to Meta Data Services if available.
-
-=head3 is_repository_required
-
-Returns true or false if writing to Meta Data Services is required.
-
-=head3 to_string
-
-Returns a string will all properties from the package, separated with new line characters. Each property also has
-a text with a sort description of the property.
-
-This method will not fetch automatically the properties from objects inside the package, line connections and
-tasks. Each object must be fetched first using the apropriated method and them invoking the C<to_string> from each
-object.
-
-=head3 get_connections
-
-Returns an array reference with all connections objects available inside the package.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 count_connections
-
-Return an integer that represents the total amount of connections available in the package object.
-
-Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
-looping over the references in the array reference.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 get_tasks
-
-Returns an array reference with all tasks available in the package.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-B<Warning:> C<get_tasks> method will abort with an error message if the DTS package has tasks that are not available
-as subclasses of C<DTS::Task> class. In doubt, use the available methods to fetch only the supported tasks. This 
-should be "fixed" in future releases with the implementation of the missing classes.
-
-=head3 count_tasks
-
-Returns a integer with the number of tasks available inside the package.
-
-Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
-looping over the references in the array reference.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 count_datapumps
-
-Returns an integer represents the total amount of C<DataPumpTask> tasks available in the package.
-
-Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
-looping over the references in the array reference.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 get_datapumps
-
-Returns an array reference with all the C<DataPumpTasks> tasks available in the package.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 count_dynamic_props
-
-Returns an integer represents the total amount of C<DynamicPropertiesTask> tasks available in the package.
-
-Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
-looping over the references in the array reference.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 get_dynamic_props
-
-Returns an array reference with all the C<DynamicPropertiesTask> tasks available in the package.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 get_execute_pkgs
-
-Returns an array reference with all the C<ExecutePackageTask> tasks available in the package.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 count_execute_pkgs
-
-Returns an integer with the total of C<ExecutePackageTask> tasks available in the package.
-
-Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
-looping over the references in the array reference.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 get_send_emails
-
-Returns an array reference with all the C<SendMailTask> tasks available in the package.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
-
-=head3 count_send_emails
-
-Returns an integer with the total of C<SendMailTask> tasks available in the package.
-
-Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
-looping over the references in the array reference.
-
-This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
-after invoking the C<kill_sibling> method.
+This API is incomplete. There are much more properties defined in the SQL Server API.
 
 =head1 SEE ALSO
 
@@ -609,7 +773,7 @@ object hierarchy, but you will need to convert examples written in VBScript to P
 
 =head1 AUTHOR
 
-Alceu Rodrigues de Freitas Junior, E<lt>glasswalk3r@yahoo.com.brE<gt>
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -618,6 +782,5 @@ Copyright (C) 2006 by Alceu Rodrigues de Freitas Junior
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
-
 
 =cut

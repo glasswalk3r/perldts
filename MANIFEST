@@ -19,6 +19,12 @@ lib/DTS/Task/ExecutePackage.pm
 lib/DTS/Task/SendEmail.pm
 lib/DTS/TaskFactory.pm
 lib/DTS/TaskTypes.pm
+lib/DTS/Assignment/Destination.pm
+lib/DTS/Assignment/DestinationFactory.pm
+lib/DTS/Assignment/Destination/Connection.pm
+lib/DTS/Assignment/Destination/GlobalVar.pm
+lib/DTS/Assignment/Destination/Package.pm
+lib/DTS/Assignment/Destination/Task.pm
 Makefile.PL
 MANIFEST			This list of files
 README

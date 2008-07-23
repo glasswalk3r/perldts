@@ -1,5 +1,54 @@
 package DTS::Connection;
 
+=head1 NAME
+
+DTS::Connection - a Perl class to represent a Microsoft SQL Server 2000 DTS Connection object
+
+=head1 SYNOPSIS
+
+    use DTS::Application;
+
+    my $app = DTS::Application->new(
+        {
+            server                 => $server,
+            user                   => $user,
+            password               => $password,
+            use_trusted_connection => 0
+        }
+    );
+
+    my $package = $app->get_db_package(
+        { id => '', version_id => '', name => 'some_package', package_password => '' } );
+
+    my $conns_ref = $package->get_connections;
+
+    foreach my $conn (@{$conns_ref}) {
+
+        print $conn->get_name, "\n";
+
+    }
+
+    # or if you have $connection as a regular 
+    # MS SQL Server Connection object
+
+    my $conn2 = DTS::Connection->new($connection);
+    print $conn2->to_string, "\n";
+
+=head1 DESCRIPTION
+
+C<DTS::Connection> class represent a DTS Connection object, serving as a layer to fetch properties
+from the DTS Connection stored in the C<_sibling> attribute.
+
+Although it's possible to create an C<DTS::Connection> object directly (once a DTS Connection object is available), one
+will probably fetch connections from a package using the C<get_connections> method from the L<DTS::Package|DTS::Package> 
+module.
+
+=head2 EXPORT
+
+None by default.
+
+=cut
+
 use 5.008008;
 use strict;
 use warnings;
@@ -8,11 +57,22 @@ use base qw(Class::Accessor DTS);
 use Win32::OLE qw(in);
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(
     qw(oledb catalog datasource description id name password provider user));
+
+=head2 METHODS
+
+Inherints all methods from L<DTS|DTS> superclass.
+
+=head3 new
+
+The only expected parameter to the C<new> method is an already available DTS Connection object. Returns a 
+C<DTS::Connection> object.
+
+=cut
 
 sub new {
 
@@ -40,11 +100,16 @@ sub new {
 
 }
 
-# an alias, since provider is not that easy to remember
+=head3 get_type
+
+Fetchs the I<provider> value of the connection. It is an alias for the C<get_provider> method.
+
+=cut
+
 sub get_type {
 
     my $self = shift;
-    return $self->get_provider;
+    return $self->get_provider();
 
 }
 
@@ -101,6 +166,13 @@ sub _init_oledb_props {
 
 }
 
+=head3 to_string
+
+Returns a string with all properties (but those returned by C<get_oledb> method) from the a C<DTS::Connection>
+object. Each property will have a short description before the value and will be separated by new line characters.
+
+=cut
+
 sub to_string {
 
     my $self = shift;
@@ -129,62 +201,6 @@ sub to_string {
 1;
 __END__
 
-=head1 NAME
-
-DTS::Connection - a Perl class to represent a Microsoft SQL Server 2000 DTS Connection object
-
-=head1 SYNOPSIS
-
-    use DTS::Application;
-
-    my $app = DTS::Application->new(
-        {
-            server                 => $server,
-            user                   => $user,
-            password               => $password,
-            use_trusted_connection => 0
-        }
-    );
-
-    my $package = $app->get_db_package(
-        { id => '', version_id => '', name => 'some_package', package_password => '' } );
-
-    my $conns_ref = $package->get_connections;
-
-    foreach my $conn (@{$conns_ref}) {
-
-        print $conn->get_name, "\n";
-
-    }
-
-    # or if you have $connection as a regular 
-    # MS SQL Server Connection object
-
-    my $conn2 = DTS::Connection->new($connection);
-    print $conn2->to_string, "\n";
-
-=head1 DESCRIPTION
-
-C<DTS::Connection> class represent a DTS Connection object, serving as a layer to fetch properties
-from the DTS Connection stored in the C<_sibling> attribute.
-
-Although it's possible to create an C<DTS::Connection> object directly (once a DTS Connection object is available), one
-will probably fetch connections from a package using the C<get_connections> method from the L<DTS::Package|DTS::Package> 
-module.
-
-=head2 EXPORT
-
-None by default.
-
-=head2 METHODS
-
-Inherints all methods from L<DTS|DTS> superclass.
-
-=head3 new
-
-The only expected parameter to the C<new> method is an already available DTS Connection object. Returns a 
-C<DTS::Connection> object.
-
 =head3 get_name
 
 Fetchs the name of the connection.
@@ -192,10 +208,6 @@ Fetchs the name of the connection.
 =head3 get_description
 
 Fetchs the description of the connection.
-
-=head3 get_type
-
-Fetchs the I<provider> value of the connection. It server as an alias for the C<get_provider> method.
 
 =head3 get_datasource
 
@@ -225,19 +237,14 @@ Fetchs the password used in the authentication of the connection.
 
 =head3 get_oledb
 
-Returns an hash reference with all OLEDB properties used by the connection.
+Returns an hash reference with all OLEDB properties used by the connection, being each key (a property) value 
+a hash reference itself.
 
-Each key in the hash reference is the property name without the spaces. The value for each key is another hash
-reference that contains the keys C<name>, C<value>, C<property_id> and C<property_set>. These keys correspond to
-the properties C<Name>, C<Value>, C<PropertyID> and C<PropertySet> from the original property defined in the DTS
-API.
+Being a property a hash reference, it contaings by default the following keys: C<name>, C<value>, C<property_id> 
+and C<property_set>. These keys correspond to the properties C<Name>, C<Value>, C<PropertyID> and C<PropertySet> 
+from the original property defined in the DTS API.
 
-Specially for the property C<FileType> that is a convertion from numeric code to the proper string.
-
-=head3 to_string
-
-Returns a string with all properties (but those returned by C<get_oledb> method) from the a C<DTS::Connection>
-object. Each property will have a short description before the value and will be separated by new line characters.
+Only for the property C<FileType>, that is a convertion from numeric code to the proper string.
 
 =head1 CAVEATS
 
@@ -272,7 +279,7 @@ This API is incomplete. There are much more properties defined in the MS SQL Ser
 
 =head1 AUTHOR
 
-Alceu Rodrigues de Freitas Junior, E<lt>glasswalk3r@yahoo.com.brE<gt>
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -281,6 +288,5 @@ Copyright (C) 2006 by Alceu Rodrigues de Freitas Junior
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
-
 
 =cut

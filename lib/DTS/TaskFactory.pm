@@ -1,12 +1,46 @@
 package DTS::TaskFactory;
 
+=head1 NAME
+
+DTS::TaskFactory - a Perl abstract class to create DTS Package Tasks in a polymorphic way 
+
+=head1 SYNOPSIS
+
+    use DTS::TaskFactory;
+
+	# $task is a unknow DTS Task object
+    my $new_task = DTS::TaskFactory::create($task);
+    print $new_task->to_string, "\n";
+
+=head1 DESCRIPTION
+
+C<DTS::TaskFactory> creates C<DTS::Task> subclasses objects depending on the type of the DTS Package Task object
+passed as a reference.
+
+=head2 EXPORT
+
+Nothing.
+
+=cut
+
 use 5.008008;
 use strict;
 use warnings;
 use Carp;
 use DTS::TaskTypes;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
+
+=head2 METHODS
+
+=head3 create
+
+Expects a C<DTSTask> object passed as a parameter.
+
+Returns a object from a subclass of C<DTS::Task> depending on the C<CustomTaskID> property from the C<Task>
+object passed as a parameter.
+
+=cut
 
 sub create {
 
@@ -36,36 +70,6 @@ sub create {
 
 __END__
 
-=head1 NAME
-
-DTS::TaskFactory - a Perl abstract class to create DTS Package Tasks in a polymorphic way 
-
-=head1 SYNOPSIS
-
-    use DTS::TaskFactory;
-
-	# $task is a unknow DTS Task object
-    my $new_task = DTS::TaskFactory::create($task);
-    print $new_task->to_string, "\n";
-
-=head1 DESCRIPTION
-
-C<DTS::TaskFactory> creates C<DTS::Task> subclasses objects depending on the type of the DTS Package Task object
-passed as a reference.
-
-=head2 EXPORT
-
-None by default.
-
-=head2 METHODS
-
-=head3 create
-
-Expects a C<DTSTask> object passed as a parameter.
-
-Returns a object from a subclass of C<DTS::Task> depending on the C<CustomTaskID> property from the C<Task>
-object passed as a parameter.
-
 =head1 SEE ALSO
 
 =over
@@ -84,7 +88,7 @@ L<DTS::TaskTypes> at C<perldoc>.
 
 =head1 AUTHOR
 
-Alceu Rodrigues de Freitas Junior, E<lt>glasswalk3r@yahoo.com.brE<gt>
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 

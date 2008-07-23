@@ -5,10 +5,10 @@ use Test::More;
 use DTS::TaskFactory;
 use DTS::Package;
 
-my $dts = shift;
+my $dts      =  shift;
 chomp $dts;
 
-my $server = 'foobar';
+my $server   = 'foobar';
 
 # must fetch from Package get_connections and parse to retrieve only
 # the flag file connections. This should be done before plan tests to
@@ -18,7 +18,7 @@ my @flat_file_conns;
 my $app = DTS::Application->new(
     {
         server                 => $server,
-        use_trusted_connection => 1
+        use_trusted_connection => 1 
     }
 );
 
@@ -42,10 +42,8 @@ ok(
     $package->use_explicit_global_vars,
     'Global variable are explicit declared'
 );
-cmp_ok( $package->count_connections, '>=', 2,
-    'Package must have at least two connections' );
-cmp_ok( $package->count_datapumps, '>=', 1,
-    'Package must have at least one datapump task' );
+cmp_ok($package->count_connections, '>=', 2, 'Package must have at least two connections');
+cmp_ok($package->count_datapumps, '>=', 1, 'Package must have at least one datapump task');
 
 test_conn_auto_cfg();
 test_datapumps();

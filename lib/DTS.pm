@@ -1,48 +1,5 @@
 package DTS;
 
-use 5.008008;
-use strict;
-use warnings;
-use Data::Dumper;
-
-our $VERSION = '0.01';
-
-sub get_sibling {
-
-    my $self = shift;
-    return $self->{_sibling};
-
-}
-
-sub kill_sibling {
-
-    my $self = shift;
-    delete $self->{_sibling};
-
-}
-
-sub debug {
-
-    my $self = shift;
-    my $clone;
-
-    foreach my $key ( keys( %{$self} ) ) {
-
-        next if ( $key eq '_sibling' );
-
-        $clone->{$key} = $self->{$key};
-
-    }
-
-    bless $clone, ref($self);
-
-    print Dumper($clone);
-
-}
-
-1;
-__END__
-
 =head1 NAME
 
 DTS - Perl classes to access Microsoft SQL Server 2000 DTS Packages 
@@ -70,35 +27,72 @@ easier (and globally) access to the methods C<kill_sibling> and C<get_sibling>.
 You may be asking yourself why having all this trouble to write such API as an layer to access data thought C<Win32::OLE>
 module.
 
-The very simple reason is: MS SQL Server 2000 is terrible to work with (lots and lots of useless indirection), the 
+The very simple reason is: MS SQL Server 2000 API is terrible to work with (lots and lots of indirection), the 
 documentation is not as good as it should be and one has to convert examples from it of VBScript code to Perl.
 
 C<DTS> API was created to provide an easier (and more "perlish") way to fetch data from a DTS package. 
-One can use this API to easially create reports or implement automatic tests using a module 
+One can use this API to easily create reports or implement automatic tests using a module 
 as L<Test::More|Test::More> (see EXAMPLES directory in the tarball distribution of this module).
-
-At this version, C<DTS> API has no methods that can change object state.
-
-=back
 
 =head2 EXPORT
 
 None by default.
 
+=cut
+
+use 5.008008;
+use strict;
+use warnings;
+use Data::Dumper;
+use Carp qw(confess);
+
+our $VERSION = '0.02';
+
 =head2 METHODS
-
-=head3 kill_sibling
-
-This method will simple delete the key C<_sibling> from the hash reference used by all classes that inherints from
-DTS class. Once the key is removed, the Perl garbage collector will remove the related object created using the MS SQL 
-Server 2000.
-
-The reasons of why doing such thing is described in L<CAVEATS|/CAVEATS>.
 
 =head3 get_sibling 
 
 Returns the relationed DTS object. All objects holds an reference to the original DTS object once is instantiated, 
 unless the C<kill_sibling> is executed.
+
+If the reference is not available, it will abort program execution with an error.
+
+=cut
+
+sub get_sibling {
+
+    my $self = shift;
+
+    if ( exists( $self->{_sibling} ) ) {
+
+        return $self->{_sibling};
+
+    }
+    else {
+
+        confess
+          "The reference to the original DTS object is not more available\n";
+
+    }
+
+}
+
+=head3 kill_sibling
+
+This method will simple delete the key (or attribute, if you prefer) C<_sibling> from the hash reference used by all classes that inherints from
+DTS class. Once the key is removed, the Perl garbage collector will remove the related object created using the MS SQL 
+Server 2000.
+
+The reasons of why doing such thing is described in L<CAVEATS|/CAVEATS>.
+
+=cut
+
+sub kill_sibling {
+
+    my $self = shift;
+    delete $self->{_sibling};
+
+}
 
 =head3 debug
 
@@ -110,6 +104,30 @@ attribute. This allows to quickly check the object state. This is not as good as
 the Perl debugger dies while checking DTS objects, so it's better than nothing.
 
 Maybe in the future this method is replaced to turn on debug mode for all methods calls using C<Log::Log4perl> module.
+
+=cut
+
+sub debug {
+
+    my $self = shift;
+    my $clone;
+
+    foreach my $key ( keys( %{$self} ) ) {
+
+        next if ( $key eq '_sibling' );
+
+        $clone->{$key} = $self->{$key};
+
+    }
+
+    bless $clone, ref($self);
+
+    print Dumper($clone);
+
+}
+
+1;
+__END__
 
 =head1 CAVEATS
 
@@ -125,7 +143,8 @@ or using a module like C<Log4Perl> to detect issues in the code.
 If you need to persist any object created, first remove the I<sibling> object using the C<kill_sibling> 
 method. As said before, it was detected issues with the L<Data::Dumper|Data::Dumper> C<Dumper> function, but there
 are no garantees that invoking C<kill_sibling> will solve the issue, since this probably also depends on Perl 
-garbage collector.
+garbage collector. Anyway, persisting a DTS object will do no good if you need to execute methods that depends on the
+I<sibling> attribute since those methods are based remote requests.
 
 C<kill_sibling> probably will help also regarding memory using, althought this was not tested formally.
 
@@ -158,7 +177,7 @@ README file in the module distribuition about how to enable extended tests for t
 
 =head1 AUTHOR
 
-Alceu Rodrigues de Freitas Junior, E<lt>glasswalk3r@yahoo.com.brE<gt>
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 

@@ -1,4 +1,5 @@
 use Test::More tests => 2;
+
 BEGIN { use_ok('DTS::Task::DataPump') }
 can_ok(
     'DTS::Task::DataPump',
@@ -24,5 +25,16 @@ can_ok(
       get_rows_complete
       get_exception_file
       get_commit_size
-      get_max_errors)
+      get_max_errors
+	  get_description
+	  get_fetch_size
+	  get_dest_obj
+	  get_dest_sql
+	  get_first_row
+	  get_progress_count
+	  get_source_conn_id
+	  get_dest_conn_id
+	  get_source_obj
+	  get_source_sql
+	  get_name)
 );

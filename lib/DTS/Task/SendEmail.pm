@@ -116,57 +116,6 @@ sub save_sent {
 
 }
 
-=head3 get_properties
-
-Returns an array reference. The values are returned in the following order below:
-
-=over
-
-=item 0 
-is_nt_service
-
-=item 1 
-save_sent
-
-=item 2
-message_text
-
-=item 3
-cc_line
-
-=item 4
-attachments
-
-=item 5
-profile_password
-
-=item 6
-profile
-
-=item 7
-subject
-
-=item 8
-to_line
-
-=back
-
-=cut
-
-sub get_properties {
-
-    my $self = shift;
-
-    return [
-        $self->is_nt_service,    $self->save_sent,
-        $self->get_message_text, $self->get_cc_line,
-        $self->get_attachments,  $self->get_profile_password,
-        $self->get_profile,      $self->get_subject,
-        $self->get_to_line
-    ];
-
-}
-
 sub to_string {
 
     my $self = shift;

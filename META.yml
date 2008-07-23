@@ -1,12 +1,13 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         DTS
-version:      0.02
+version:      0.03
 version_from: lib/DTS.pm
 installdirs:  site
 requires:
     Carp:                          1.04
     Class::Accessor:               0.25
+    Class::Publisher:              0.2
     DateTime:                      0.35
     Hash::Util:                    0.05
     Win32::OLE:                    0.1704

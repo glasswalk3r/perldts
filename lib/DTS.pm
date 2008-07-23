@@ -34,9 +34,12 @@ C<DTS> API was created to provide an easier (and more "perlish") way to fetch da
 One can use this API to easily create reports or implement automatic tests using a module 
 as L<Test::More|Test::More> (see EXAMPLES directory in the tarball distribution of this module).
 
+Current development state should be considered BETA, despite the API is already usable. There is a high chance that the
+interface changes during next releases, so be careful when updating.
+
 =head2 EXPORT
 
-None by default.
+Nothing.
 
 =cut
 
@@ -46,7 +49,7 @@ use warnings;
 use Data::Dumper;
 use Carp qw(confess);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 METHODS
 

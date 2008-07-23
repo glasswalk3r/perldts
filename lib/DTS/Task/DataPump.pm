@@ -50,18 +50,22 @@ use Carp qw(confess);
 use base qw(DTS::Task Class::Accessor);
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 METHODS
+
+A good amount of methods available in the original DTS API are available, including methods to access the properties.
+There are some methods that do not exists in the DTS API.
 
 =cut
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(
-    qw(rows_complete use_identity_inserts rows_complete exception_file
-      commit_size max_errors)
+    qw(use_identity_inserts rows_complete exception_file
+      commit_size max_errors fetch_size dest_obj dest_sql
+      first_row progress_count source_conn_id dest_conn_id source_obj source_sql
+      exception_qualifier)
 );
-
 
 =head3 new
 
@@ -75,27 +79,36 @@ sub new {
     my $class = shift;
     my $self  = $class->SUPER::new(@_);
 
+    my $sibling = $self->get_sibling();
+
     $self->{exception_qualifier} =
-      $self->get_sibling->Properties->Parent->ExceptionFileTextQualifier;
+      $sibling->Properties->Parent->ExceptionFileTextQualifier;
     $self->{input_global_vars} =
-      $self->get_sibling->Properties->Parent->InputGlobalVariableNames;
-    $self->{rows_complete} =
-      $self->get_sibling->Properties->Parent->RowsComplete;
-    $self->{exception_file} =
-      $self->get_sibling->Properties->Parent->ExceptionFileName;
-    $self->{commit_size} =
-      $self->get_sibling->Properties->Parent->InsertCommitSize;
-    $self->{max_errors} =
-      $self->get_sibling->Properties->Parent->MaximumErrorCount;
-    $self->{use_fast_load} =
-      $self->get_sibling->Properties->Parent->UseFastLoad;
+      $sibling->Properties->Parent->InputGlobalVariableNames;
+    $self->{rows_complete}  = $sibling->Properties->Parent->RowsComplete;
+    $self->{exception_file} = $sibling->Properties->Parent->ExceptionFileName;
+    $self->{commit_size}    = $sibling->Properties->Parent->InsertCommitSize;
+    $self->{max_errors}     = $sibling->Properties->Parent->MaximumErrorCount;
+    $self->{use_fast_load}  = $sibling->Properties->Parent->UseFastLoad;
 
 # :TRICKY:12/12/2006:ARFjr: strange name for a property that appears with a different name in the DTS Designer
-    $self->{always_commit} =
-      $self->get_sibling->Properties->Parent->DataPumpOptions;
+    $self->{always_commit} = $sibling->Properties->Parent->DataPumpOptions;
 
     $self->{use_identity_inserts} =
-      $self->get_sibling->Properties->Parent->AllowIdentityInserts;
+      $sibling->Properties->Parent->AllowIdentityInserts;
+
+    $self->{fetch_size}  = $sibling->Properties->Parent->FetchBufferSize;
+    $self->{dest_obj}    = $sibling->Properties->Parent->DestinationObjectName;
+    $self->{dest_sql}  = $sibling->Properties->Parent->DestinationSQLStatement;
+    $self->{first_row} = $sibling->Properties->Parent->FirstRow;
+    $self->{progress_count} = $sibling->Properties->Parent->ProgressRowCount;
+    $self->{source_conn_id} = $sibling->Properties->Parent->SourceConnectionID;
+    $self->{dest_conn_id} =
+      $sibling->Properties->Parent->DestinationConnectionID;
+    $self->{source_obj} = $sibling->Properties->Parent->SourceObjectName;
+    $self->{source_sql} = $sibling->Properties->Parent->SourceSQLStatement;
+    $self->{first_row}  = $sibling->Properties->Parent->FirstRow;
+    $self->{fetch_size} = $sibling->Properties->Parent->FetchBufferSize;
 
     $self->_get_fast_load_options;
     $self->_get_exception_file_options;
@@ -105,6 +118,66 @@ sub new {
     return $self;
 
 }
+
+=head3 get_dest_conn_id
+
+Returns the value of DestinationConnectionID property.
+
+=head3 get_dest_obj
+
+Returns the value of DestinationObjectName property.
+
+=head3 get_dest_sql
+
+Returns the value of DestinationSQLStatement property.
+
+=head3 get_source_obj
+
+Returns the value of SourceObjectName property.
+
+=head3 get_source_sql
+
+Returns the value of SourceSQLStatement property.
+
+=head3 get_source_conn_id
+
+Returns the value of SourceConnectionID property.
+
+=head3 get_progress_count
+
+Returns the value of ProgressRowCount property.
+
+=head3 get_rows_complete
+
+Returns the value of RowsComplete property.
+
+=head3 get_fetch_size
+
+Returns the value of FetchBufferSize property.
+
+=head3 get_first_row
+
+Returns the value of FirstRow property.
+
+=head3 get_exception_qualifier
+
+Returns the value of ExceptionFileTextQualifier property.
+
+=head3 get_input_global_vars
+
+Returns the value of InputGlobalVariablesNames property.
+
+=head3 get_exception_file
+
+Returns the value of ExceptionFileName property.
+
+=head3 get_commit_size
+
+Returns the value of InsertCommitSize property.
+
+=head3 get_max_errors
+
+Returns the value of MaximumErrorCount property.
 
 =head3 use_single_file_7
 
@@ -262,7 +335,7 @@ sub log_is_unicode {
 Returns true or false if the C<DataPumpTask> task will commit all successful batches including the final 
 batch, even if the data pump terminates. Use this option to support restartability.
 
-Strange as it may seen, this is called as I<Always commit> options in the DTS designer application, but received
+Strange as it may seen, this is called as I<Always commit final batch> option in the DTS designer application, but receives
 the name C<DataPumpOptions> property in the DTS API.
 
 =cut
@@ -275,7 +348,6 @@ sub always_commit {
     return $self->{always_commit};
 
 }
-
 
 sub _get_exception_file_options {
 
@@ -477,8 +549,11 @@ sub to_string {
 
     my $self = shift;
 
-    my $properties_string =
-        "Input global variables: "
+    return 'Datapump name: '
+      . $self->get_name()
+      . "\r\n\tDatapump description: "
+      . $self->get_description()
+      . "\r\n\tInput global variables: "
       . $self->get_input_global_vars
       . "\r\n\tRows complete: "
       . $self->get_rows_complete
@@ -517,9 +592,37 @@ sub to_string {
       . "\r\n\tLog encoding is OEM? "
       . ( ( $self->log_is_OEM ) ? 'true' : 'false' )
       . "\r\n\tLog encoding is Unicode? "
-      . ( ( $self->log_is_unicode ) ? 'true' : 'false' );
-
-    return $properties_string;
+      . ( ( $self->log_is_unicode ) ? 'true' : 'false' )
+      . "\r\n\tRows processed: "
+      . $self->get_rows_complete()
+      . "\r\n\tUses identity insert? "
+      . ( ( $self->use_identity_inserts ) ? 'true' : 'false' )
+      . "\r\n\tException filename: "
+      . $self->get_exception_file()
+      . "\r\n\tCommit size: "
+      . $self->get_commit_size()
+      . "\r\n\tMaximum errors allowed: "
+      . $self->get_max_errors()
+      . "\r\n\tFetch buffer size: "
+      . $self->get_fetch_size()
+      . "\r\n\tDestination object: "
+      . $self->get_dest_obj()
+      . "\r\n\tDestination SQL statement: "
+      . $self->get_dest_sql()
+      . "\r\n\tFirst row to copy: "
+      . $self->get_first_row()
+      . "\r\n\tProgress row count: "
+      . $self->get_progress_count()
+      . "\r\n\tSource connection ID: "
+      . $self->get_source_conn_id()
+      . "\r\n\tDestination connection ID: "
+      . $self->get_dest_conn_id()
+      . "\r\n\tSource object: "
+      . $self->get_source_obj()
+      . "\r\n\tSource SQL statement: "
+      . $self->get_source_sql()
+      . "\r\n\tText quafilier in exception file: "
+      . $self->get_exception_qualifier();
 
 }
 
@@ -550,95 +653,6 @@ sub get_input_global_vars {
         return $self->{input_global_vars};
 
     }
-
-}
-
-=head3 get_properties
-
-Returns an array reference with the values of the attributes of a C<DTS::Task::DataPump> in the order 
-as shown below:
-
-=over
-
-=item 0
-use_single_file_7
-
-=item 1
-use_source_row_file
-
-=item 2
-use_error_file
-
-=item 3
-overwrite_log_file
-
-=item 4
-abort_on_log_failure
-
-=item 5
-use_destination_row_file
-
-=item 6
-use_fast_load
-
-=item 7
-log_is_ansi
-
-=item 8
-log_is_OEM
-
-=item 9
-log_is_unicode
-
-=item 10
-always_commit
-
-=item 11
-use_check_constraints
-
-=item 12
-use_keep_nulls
-
-=item 13
-use_lock_table
-
-=item 14
-use_identity_inserts
-
-=item 15
-get_input_global_vars 
-
-=item 16
-rows_complete
-
-=item 17
-exception_file
-
-=item 18
-commit_size
-
-=item 19
-max_errors
-
-=back
-
-=cut
-
-sub get_properties {
-
-    my $self = shift;
-    return [
-        $self->use_single_file_7,    $self->use_source_row_file,
-        $self->use_error_file,       $self->overwrite_log_file,
-        $self->abort_on_log_failure, $self->use_destination_row_file,
-        $self->use_fast_load,        $self->log_is_ansi,
-        $self->log_is_OEM,           $self->log_is_unicode,
-        $self->always_commit,        $self->use_check_constraints,
-        $self->use_keep_nulls,       $self->use_lock_table,
-        $self->use_identity_inserts, $self->get_input_global_vars,
-        $self->get_rows_complete,    $self->get_exception_file,
-        $self->get_commit_size,      $self->get_max_errors
-      ]
 
 }
 

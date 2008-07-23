@@ -5,11 +5,12 @@ my %config = (
     NAME         => 'DTS',
     VERSION_FROM => 'lib/DTS.pm',    # finds $VERSION
     PREREQ_PM    => {
-        'Class::Accessor' => 0.25,
-        'Hash::Util'      => 0.05,
-        'Win32::OLE'      => 0.1704,
-        'Carp'            => 1.04,
-        'DateTime'        => 0.35
+        'Class::Accessor'  => 0.25,
+        'Hash::Util'       => 0.05,
+        'Win32::OLE'       => 0.1704,
+        'Carp'             => 1.04,
+        'DateTime'         => 0.35,
+        'Class::Publisher' => 0.2
     },
     (
         $] >= 5.005
@@ -17,7 +18,7 @@ my %config = (
           (
             ABSTRACT_FROM => 'lib/DTS.pm',    # retrieve abstract from module
             AUTHOR =>
-              'Alceu Rodrigues de Freitas Junior <glasswalk3r@yahoo.com.br>'
+              'Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>'
           )
         : ()
     ),

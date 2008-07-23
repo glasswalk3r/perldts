@@ -45,7 +45,7 @@ Nothing.
 use 5.008008;
 use strict;
 use warnings;
-use Carp;
+use Carp qw(confess);
 use Hash::Util qw(lock_keys);
 
 our $VERSION = '0.02';
@@ -100,34 +100,28 @@ sub new {
     my $class = shift;
     my $self  = shift;
 
+    confess 'expects an hash refence as a parameter'
+      unless ( ref($self) eq 'HASH' );
+
     unless ( $self->{use_trusted_connection} ) {
 
         unless (( exists( $self->{user} ) )
             and ( exists( $self->{password} ) ) )
         {
 
-            croak
+            confess
 "Username and password cannot be NULL if trusted connection is not in use\n";
 
         }
+        $self->{auth_code} = 0;
 
         #creates the missing keys to avoid issues when invoking to_list method
     }
     else {
 
-        $self->{user}     = '';
-        $self->{password} = '';
-
-    }
-
-    if ( $self->{use_trusted_connection} ) {
-
+        $self->{user}      = '';
+        $self->{password}  = '';
         $self->{auth_code} = 256;
-
-    }
-    else {
-
-        $self->{auth_code} = 0;
 
     }
 

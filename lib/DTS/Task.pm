@@ -119,21 +119,8 @@ sub get_type {
 
 =head3 get_properties
 
-Not implemented. Some tasks fetch their properties in a different manner. Use this method only
-in subclasses from C<DTS::Task>.
-
-If this method is not override in subclasses it will cause the application to die.
-
-Once overrided this method should return an array reference with all properties from the respective C<DTS::Task> 
-subclass.
-
-=cut
-
-sub get_properties {
-
-    confess "get_properties must be defined in a specialized DTS::Task class\n";
-
-}
+Deprecated. This method as useful as it may be seen, since the to_string method does a better job reporting everything
+about the Task.
 
 =head3 to_string
 

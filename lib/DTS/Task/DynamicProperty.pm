@@ -114,43 +114,6 @@ sub get_assignments {
 
 }
 
-=head3 get_properties
-
-Returns an array reference with all assignments from the DynamicProperty object, being each index an hash
-with all properties of the assignment.
-
-Using the C<get_assignments> method will be more useful and less resource expensive, in most of cases.
-
-=cut
-
-sub get_properties {
-
-    my $self = shift;
-
-    my $assignments = $self->get_sibling->Assignments;
-    my @items;
-
-    if ( defined($assignments) ) {
-
-        foreach my $assignment ( in($assignments) ) {
-
-            push( @items,
-                DTS::AssignmentFactory->create($assignment)->get_properties );
-
-        }
-
-        return \@items;
-
-    }
-    else {
-
-        carp "This dynamic properties does not have any assignment\n";
-        return [];
-
-    }
-
-}
-
 =head3 to_string
 
 Returns a string with all attributes of an C<DTS::Task::DynamicProperty> class. All attributes will have a

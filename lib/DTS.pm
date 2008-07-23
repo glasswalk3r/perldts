@@ -176,6 +176,10 @@ object hierarchy, but one will need to convert examples written in VBScript to P
 =item *
 README file in the module distribuition about how to enable extended tests for the API.
 
+=item *
+Project website at http://code.google.com/p/perldts for more information, including UML diagrams and Subversion 
+repository.
+
 =back
 
 =head1 AUTHOR

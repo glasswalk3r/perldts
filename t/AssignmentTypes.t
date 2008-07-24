@@ -1,11 +1,17 @@
 use Test::More;
-BEGIN { use_ok('DTS::AssignmentTypes') }
 
-my @valid_types = qw(INI Query GlobalVar EnvVar Constant DataFile);
-my $total       = scalar(@valid_types) - 1;
+BEGIN {
 
-# $total holds the exact number of array indexes, adding one more to compensate
-plan tests => $total + 2;
+    our @valid_types = qw(INI Query GlobalVar EnvVar Constant DataFile);
+    our $total       = scalar(@valid_types);
+
+    plan tests => $total + 2;
+
+    use_ok('DTS::AssignmentTypes');
+
+}
+
+$total--;
 
 can_ok( 'DTS::AssignmentTypes', qw(get_class_name) );
 

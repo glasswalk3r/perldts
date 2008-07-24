@@ -21,7 +21,6 @@ can_ok(
       use_identity_inserts
       to_string
       get_input_global_vars
-      get_properties
       get_rows_complete
       get_exception_file
       get_commit_size

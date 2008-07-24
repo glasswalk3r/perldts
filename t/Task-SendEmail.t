@@ -2,7 +2,7 @@ use Test::More tests => 2;
 BEGIN { use_ok('DTS::Task::SendEmail') }
 can_ok(
     'DTS::Task::SendEmail',
-    qw(new get_name get_description get_type get_properties to_string is_nt_service save_sent
+    qw(new get_name get_description get_type to_string is_nt_service save_sent
       get_message_text get_cc_line get_attachments get_profile_password get_profile get_subject
-      get_to_line get_properties)
+      get_to_line)
 );

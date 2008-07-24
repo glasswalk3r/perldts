@@ -27,7 +27,7 @@ my %config = (
 my @patterns = qw( t/*.t );
 
 print
-"You can enable extended tests if the environment was configured prior the execution of this tests. See README for more information\n";
+"You can enable extended tests if the environment was prior configured. See README for more information\n";
 my $answer = prompt( 'Do you want to enable extended tests?', 'no' );
 
 if ( $answer =~ /^y/i ) {

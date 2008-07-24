@@ -119,7 +119,7 @@ sub get_type {
 
 =head3 get_properties
 
-Deprecated. This method as useful as it may be seen, since the to_string method does a better job reporting everything
+Deprecated. This method is not as useful as it may be seen, since the to_string method does a better job reporting everything
 about the Task.
 
 =head3 to_string

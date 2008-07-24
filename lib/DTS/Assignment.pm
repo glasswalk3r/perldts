@@ -33,7 +33,7 @@ use Carp qw(cluck confess);
 use DTS::AssignmentTypes;
 use DTS::Assignment::DestinationFactory;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 METHODS
 
@@ -62,8 +62,10 @@ sub new {
     $self->{destination}
       ->add_subscriber( 'changed', sub { $self->_set_destination() } );
 
-    $self->{type} =
+    $self->{typename} =
       DTS::AssignmentTypes->get_class_name( $sibling->SourceType );
+
+    $self->{type} = $sibling->SourceType();
 
     return $self;
 
@@ -92,7 +94,7 @@ abstract class to make the convertion.
 sub get_type_name {
 
     my $self = shift;
-    return $self->{type};
+    return $self->{typename};
 
 }
 

@@ -50,7 +50,7 @@ use DTS::Package;
 use DTS::Credential;
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(credential));
@@ -96,6 +96,9 @@ sub new {
     my $self;
 
     $self->{credential} = DTS::Credential->new($properties);
+
+    $self->{_sibling} = Win32::OLE->new('DTS.Application');
+
     bless $self, $class;
     lock_keys( %{$self} );
     return $self;

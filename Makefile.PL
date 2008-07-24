@@ -1,6 +1,5 @@
 use 5.008008;
 use ExtUtils::MakeMaker qw(WriteMakefile prompt);
-use Devel::AssertOS qw(MSWin32);
 
 my %config = (
     NAME         => 'DTS',
@@ -11,7 +10,8 @@ my %config = (
         'Win32::OLE'       => 0.1704,
         'Carp'             => 1.04,
         'DateTime'         => 0.35,
-        'Class::Publisher' => 0.2
+        'Class::Publisher' => 0.2,
+		'Devel::AssertOS'  => 0
     },
     (
         $] >= 5.005

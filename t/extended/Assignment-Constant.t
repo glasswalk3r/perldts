@@ -2,6 +2,7 @@ use XML::Simple;
 use Test::More tests => 6;
 use DTS::Application;
 use DTS::Assignment::Constant;
+use DTS::Assignment::Destination::Task;
 use Win32::OLE qw(in);
 
 my $xml_file = 'test-config.xml';
@@ -33,7 +34,8 @@ foreach my $assignment ( in($assignments) ) {
         {
             type        => 4,
             source      => 'dts-testing',
-            destination => 'Tasks;DTSTask_DTSSendMailTask_1;Properties;Profile'
+            destination => DTS::Assignment::Destination::Task->new(
+                q{'Tasks';'DTSTask_DTSSendMailTask_1';'Properties';'Profile'})
         },
         'get_properties returns a hash reference'
     );

@@ -17,7 +17,7 @@ can_ok(
 require DTS::Assignment::Destination::Connection;
 
 my $dest_conn = DTS::Assignment::Destination::Connection->new(
-    "'Connections';'Database connection';'Properties';'Datasource'");
+    q{'Connections';'Database connection';'Properties';'Datasource'});
 
 is( $dest_conn->get_destination(),
     'Datasource', 'get_destination returns "Datasource"' );
@@ -30,9 +30,11 @@ is(
 
 ok( $dest_conn->changes('Connection'), 'object changes a connection' );
 
-ok(
-    $dest_conn->set_string(
-        "'Connections';'New connection';'Properties';'Datasource'"),
+lives_ok(
+    sub {
+        $dest_conn->set_string(
+            q{'Connections';'New connection';'Properties';'Datasource'});
+    },
     'set_string accepts a valid destination string'
 );
 

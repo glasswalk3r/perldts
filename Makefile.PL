@@ -1,5 +1,6 @@
 use 5.008008;
 use ExtUtils::MakeMaker qw(WriteMakefile prompt);
+use Devel::AssertOS qw(MSWin32);
 
 my %config = (
     NAME         => 'DTS',

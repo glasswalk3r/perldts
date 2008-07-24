@@ -63,7 +63,7 @@ sub new {
       ->add_subscriber( 'changed', sub { $self->_set_destination() } );
 
     $self->{typename} =
-      DTS::AssignmentTypes->get_class_name( $sibling->SourceType );
+      DTS::AssignmentTypes->get_class_name( $sibling->SourceType() );
 
     $self->{type} = $sibling->SourceType();
 
@@ -199,9 +199,9 @@ sub get_properties {
     my $self = shift;
 
     return {
-        type        => $self->get_type,
-        source      => scalar( $self->get_source ),
-        destination => scalar( $self->get_destination )
+        type        => $self->get_type(),
+        source      => scalar( $self->get_source() ),
+        destination => scalar( $self->get_destination() )
       }
 
 }

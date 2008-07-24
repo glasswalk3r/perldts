@@ -62,6 +62,7 @@ use base qw(Class::Accessor);
 use Carp qw(confess);
 use Hash::Util qw(lock_keys);
 use base 'Class::Publisher';
+
 #use Log::Trace warn => {Deep => 1, Match => 'Class::Publisher'};
 
 our $VERSION = '0.01';
@@ -84,15 +85,16 @@ sub new {
 
     my $class = shift;
     my $self;
-    $self->{string} = shift;
+    my $string = shift;
+
+	$self->{string} = undef;
 
     # assuming that the last part of Class name is always the target object
     $self->{who} = ( split( /\:{2}/, $class ) )[-1];
 
-    confess "'string' attribute cannot be undefined"
-      unless ( defined( $self->{string} ) );
-
     bless $self, $class;
+
+    $self->set_string($string);
 
     $self->initialize();
 
@@ -173,15 +175,16 @@ in it's C<_sibling> attribute, to keep all values syncronized.
 
 sub set_string {
 
-    my $self = shift;
-    $self->{string} = shift;
+    my $self   = shift;
+    my $string = shift;
 
     confess "'string' attribute cannot be undefined"
-      unless ( defined( $self->{string} ) );
+      unless ( defined($string) );
 
     confess "invalid value of destination string: $self->{string}"
-      unless ( $self->{string} =~ /^(\'[\w\s]+\'\;\'[\w\s]+\')(\'[\w\s]+\')*/);
+      unless ( $string =~ /^(\'[\w\s]+\'\;\'[\w\s]+\')(\'[\w\s]+\')*/ );
 
+    $self->{string} = $string;
     $self->initialize();
     $self->notify_subscribers('changed');
 

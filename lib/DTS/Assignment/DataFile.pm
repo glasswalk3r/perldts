@@ -51,8 +51,8 @@ Nothing.
 use 5.008008;
 use strict;
 use warnings;
+
 use base qw(DTS::Assignment);
-use Hash::Util qw(lock_keys);
 
 our $VERSION = '0.02';
 
@@ -64,12 +64,11 @@ Inherits all methods from C<DTS::Assignment>.
 
 sub new {
 
-    my $class = shift;
+	my $class = shift;
+
     my $self  = $class->SUPER::new(@_);
 
-    $self->{source} = $self->get_sibling->SourceDataFileFileName;
-
-    lock_keys( %{$self} );
+    $self->{source} = $self->get_sibling()->SourceDataFileFileName();
 
     return $self;
 

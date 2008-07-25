@@ -6,10 +6,10 @@ DTS::Assignment - a Perl base class to represent a DTS Dynamic Properties task A
 
 =head1 SYNOPSIS
 
-    package DTS::Assignment::SomethingWeird;
-    use base (DTS::Assignment);
+ package DTS::Assignment::SomethingWeird;
+ use base (DTS::Assignment);
 
-    #and goes on defining the child class
+ #and goes on defining the child class
 
 =head1 DESCRIPTION
 
@@ -29,7 +29,7 @@ use 5.008008;
 use strict;
 use warnings;
 use base qw(DTS);
-use Carp qw(cluck confess);
+use Carp qw(confess);
 use DTS::AssignmentTypes;
 use DTS::Assignment::DestinationFactory;
 
@@ -52,7 +52,7 @@ sub new {
 
     bless $self, $class;
 
-    my $sibling = $self->{_sibling};
+    my $sibling = $self->get_sibling();
 
     $self->{destination} = DTS::Assignment::DestinationFactory->create(
         $sibling->{DestinationPropertyID} );
@@ -155,8 +155,7 @@ sub set_destination {
     confess "The new string cannot be undefined"
       unless ( defined($new_string) );
 
-    my $sibling = $self->get_sibling();
-    $sibling->DestinationPropertyID = $new_string;
+    $self->get_sibling()->DestinationPropertyID = $new_string;
 
 }
 
@@ -166,9 +165,8 @@ sub _set_destination {
 
     my $self = shift;
 
-    my $sibling = $self->get_sibling();
-
-    $sibling->{DestinationPropertyID} = $self->{destination}->get_raw_string();
+    $self->get_sibling()->DestinationPropertyID() =
+      $self->{destination}->get_raw_string();
 
 }
 
@@ -189,8 +187,8 @@ destination
 
 =back
 
-Since the method C<get_source> must be overrided by subclasses of C<DTS::Assignment> this method will failed
-unless invoked thru one of those subclasses.
+Since the method C<get_source> must be overrided by subclasses of C<DTS::Assignment>, C<get_properties> will fail unless invoked 
+thru one of those subclasses.
 
 =cut
 

@@ -1,8 +1,13 @@
-use XML::Simple;
+use warnings;
+use strict;
+
 use Test::More tests => 6;
+use Win32::OLE qw(in);
+use XML::Simple;
+
 use DTS::Application;
 use DTS::Assignment::DataFile;
-use Win32::OLE qw(in);
+use DTS::Assignment::Destination::Connection;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
@@ -14,39 +19,43 @@ my $package = $app->get_db_package( { name => $config->{package} } );
 # test-all DTS package has only one Dynamic Properties Task
 my $dyn_props = @{ $package->get_dynamic_props }[0];
 
-my $assignments = $dyn_props->get_sibling->Assignments;
+my $assign_iterator = $dyn_props->get_assignments();
 
-foreach my $assignment ( in($assignments) ) {
+while ( my $assignment = $assign_iterator->() ) {
 
-    next unless ( $assignment->SourceType == 5 );
-
-    my $dts_assignment = DTS::Assignment::DataFile->new($assignment);
+    next unless ( $assignment->get_type_name() eq 'DataFile' );
 
     # test the new method new
-    isa_ok( $dts_assignment, 'DTS::Assignment::DataFile' );
-    is( $dts_assignment->get_type, 5, 'get_type returns 5' );
+    isa_ok( $assignment, 'DTS::Assignment::DataFile' );
+
+    is( $assignment->get_type, 5, 'get_type returns 5' );
 
     is(
-        $dts_assignment->get_source,
+        $assignment->get_source(),
         'E:\dts\perl_dts\DTS\test-all.txt',
         'get_source returns E:\dts\perl_dts\DTS\test-all.txt'
     );
-    is_deeply(
-        $dts_assignment->get_properties,
-        {
-            type   => 5,
-            source => 'E:\dts\perl_dts\DTS\test-all.txt',
-            destination =>
-              'Connections;Text File (Source);Properties;DataSource'
-        },
-        'get_properties returns a hash reference'
-    );
-    like( $dts_assignment->to_string, qr/[\w\n]+/,
-        'to_string returns a string with new line characters' );
 
-    like( $dts_assignment->get_destination,
-        qr/[\w\;\(\)\s]+$/,
-        'get_destination returns a string with semicolons characters' );
+    is_deeply(
+        $assignment->get_properties(),
+        {
+            type        => 5,
+            source      => 'E:\dts\perl_dts\DTS\test-all.txt',
+            destination => DTS::Assignment::Destination::Connection->new(
+                q{'Connections';'Text File (Source)';'Properties';'DataSource'}
+            )
+        },
+        'get_properties returns a well defined hash reference'
+    );
+
+    like( $assignment->to_string(),
+        qr/[\w\n]+/, 'to_string returns a string with new line characters' );
+
+    isa_ok(
+        $assignment->get_destination(),
+        'DTS::Assignment::Destination',
+        'get_destination returns a DTS::Assignment::Destination object'
+    );
 
 }
 

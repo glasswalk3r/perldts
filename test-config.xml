@@ -3,7 +3,7 @@
 <config>
 <package>test all</package>
 <credential>
-	<server>foobar</server>
+	<server>brspalfreitas</server>
 <use_trusted_connection>1</use_trusted_connection>
 </credential>
 </config>

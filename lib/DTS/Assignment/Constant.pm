@@ -68,7 +68,7 @@ sub new {
     my $class = shift;
     my $self  = $class->SUPER::new(@_);
 
-    $self->{source} = $self->get_sibling->SourceConstantValue;
+    $self->{source} = $self->get_sibling()->SourceConstantValue();
     lock_keys( %{$self} );
     return $self;
 

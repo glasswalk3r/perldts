@@ -1,7 +1,7 @@
-use Test::More tests => 3;
-use Test::Exception;
+use Test::More tests => 2;
 
 BEGIN { use_ok('DTS::Assignment::Destination') }
+
 can_ok(
     'DTS::Assignment::Destination',
     qw(new
@@ -12,6 +12,4 @@ can_ok(
       set_string
       changes)
 );
-
-require DTS::Assignment::Destination;
 

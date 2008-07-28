@@ -1,10 +1,8 @@
 use warnings;
 use strict;
 
-use Test::More tests => 2;
-use Win32::OLE qw(in);
+use Test::More;
 use XML::Simple;
-
 use DTS::Application;
 use DTS::Assignment::Destination::Connection;
 
@@ -17,6 +15,8 @@ my $package = $app->get_db_package( { name => $config->{package} } );
 
 # test-all DTS package has only one Dynamic Properties Task
 my $dyn_props = @{ $package->get_dynamic_props }[0];
+
+plan tests => $dyn_props->count_assignments() * 2;
 
 my $assign_iterator = $dyn_props->get_assignments();
 

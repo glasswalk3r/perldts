@@ -1,7 +1,11 @@
+use strict;
+use warnings;
+
 use XML::Simple;
 use Test::More tests => 5;
 use DTS::Application;
 use DTS::Assignment::GlobalVar;
+use DTS::Assignment::Destination::Task;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
@@ -25,17 +29,17 @@ while ( my $assignment = $assign_iterator->() ) {
     next unless ( $assignment->get_type_name() eq 'GlobalVar' );
 
     # test the new method new
-    isa_ok( $dts_assignment, 'DTS::Assignment::GlobalVar' );
-    is( $dts_assignment->get_type, $type_code, "get_type returns $type_code" );
+    isa_ok( $assignment, 'DTS::Assignment::GlobalVar' );
+    is( $assignment->get_type(), $type_code, "get_type returns $type_code" );
 
-    is( $dts_assignment->get_source, $source, "get_source returns $source" );
+    is( $assignment->get_source(), $source, "get_source returns $source" );
 
     is_deeply(
-        $dts_assignment->get_properties,
+        $assignment->get_properties(),
         {
             type        => $type_code,
             source      => $source,
-            destination => DTS::Assignment::Destination::GlobalVar->new(
+            destination => DTS::Assignment::Destination::Task->new(
 q{'Tasks';'DTSTask_DTSExecutePackageTask_1';'Properties';'InputGlobalVariableNames'}
             )
         },
@@ -43,7 +47,7 @@ q{'Tasks';'DTSTask_DTSExecutePackageTask_1';'Properties';'InputGlobalVariableNam
 
     );
 
-    like( $dts_assignment->to_string, qr/[\w\n]+/,
+    like( $assignment->to_string, qr/[\w\n]+/,
         'to_string returns a string with new line characters' );
 
 }

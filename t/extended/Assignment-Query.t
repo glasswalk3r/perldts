@@ -1,8 +1,10 @@
 use XML::Simple;
-use Test::More tests => 6;
+use Test::More tests => 5;
 use DTS::Application;
 use DTS::Assignment::Query;
-use Win32::OLE qw(in);
+use DTS::Assignment::Destination::GlobalVar;
+use warnings;
+use strict;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
@@ -21,34 +23,32 @@ my $source =
 "[2].[SELECT TERRITORYID FROM TERRITORIES WHERE TERRITORYDESCRIPTION = 'Boston']";
 my $destination = 'Global Variables;territory_id;Properties;Value';
 
-my $assignments = $dyn_props->get_sibling->Assignments;
+my $iterator = $dyn_props->get_assignments();
 
-foreach my $assignment ( in($assignments) ) {
+while ( my $assignment = $iterator->() ) {
 
-    next unless ( $assignment->SourceType == $type_code );
-
-    my $dts_assignment = DTS::Assignment::Query->new($assignment);
+    next unless ( $assignment->get_type_name() eq 'Query' );
 
     # test the new method new
-    isa_ok( $dts_assignment, 'DTS::Assignment::Query' );
-    is( $dts_assignment->get_type, $type_code, "get_type returns $type_code" );
+    isa_ok( $assignment, 'DTS::Assignment::Query' );
 
-    is( $dts_assignment->get_source, $source, "get_source returns $source" );
+    is( $assignment->get_type(), $type_code, "get_type returns $type_code" );
+
+    is( $assignment->get_source(), $source, "get_source returns $source" );
+
     is_deeply(
-        $dts_assignment->get_properties,
+        $assignment->get_properties(),
         {
             type        => $type_code,
             source      => $source,
-            destination => $destination
+            destination => DTS::Assignment::Destination::GlobalVar->new(
+                q{'Global Variables';'territory_id';'Properties';'Value'})
         },
         'get_properties returns a hash reference'
     );
-    like( $dts_assignment->to_string, qr/[\w\n]+/,
-        'to_string returns a string with new line characters' );
 
-    like( $dts_assignment->get_destination,
-        qr/[\w\;\(\)\s]+$/,
-        'get_destination returns a string with semicolons characters' );
+    like( $assignment->to_string, qr/[\w\n]+/,
+        'to_string returns a string with new line characters' );
 
 }
 

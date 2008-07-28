@@ -1,8 +1,7 @@
 use XML::Simple;
-use Test::More tests => 6;
+use Test::More tests => 5;
 use DTS::Application;
 use DTS::Assignment::GlobalVar;
-use Win32::OLE qw(in);
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
@@ -17,39 +16,35 @@ my $dyn_props = @{ $package->get_dynamic_props }[0];
 # these are the values available in the DTS package
 # (hey, I looked thru DTS Designer to get them!)
 my $type_code = 2;
-my $source = 'computer_name';
-my $destination = 'Tasks;DTSTask_DTSExecutePackageTask_1;Properties;InputGlobalVariableNames';
+my $source    = 'computer_name';
 
-my $assignments = $dyn_props->get_sibling->Assignments;
+my $assign_iterator = $dyn_props->get_assignments();
 
-foreach my $assignment ( in($assignments) ) {
+while ( my $assignment = $assign_iterator->() ) {
 
-    next unless ( $assignment->SourceType == $type_code );
-
-    my $dts_assignment = DTS::Assignment::GlobalVar->new($assignment);
-
-	$dts_assignment->debug;
+    next unless ( $assignment->get_type_name() eq 'GlobalVar' );
 
     # test the new method new
     isa_ok( $dts_assignment, 'DTS::Assignment::GlobalVar' );
     is( $dts_assignment->get_type, $type_code, "get_type returns $type_code" );
 
     is( $dts_assignment->get_source, $source, "get_source returns $source" );
+
     is_deeply(
         $dts_assignment->get_properties,
         {
             type        => $type_code,
             source      => $source,
-            destination => $destination
+            destination => DTS::Assignment::Destination::GlobalVar->new(
+q{'Tasks';'DTSTask_DTSExecutePackageTask_1';'Properties';'InputGlobalVariableNames'}
+            )
         },
-        'get_properties returns a hash reference'
+        'get_properties returns a well defined hash reference'
+
     );
+
     like( $dts_assignment->to_string, qr/[\w\n]+/,
         'to_string returns a string with new line characters' );
-
-    like( $dts_assignment->get_destination,
-        qr/[\w\;\(\)\s]+$/,
-        'get_destination returns a string with semicolons characters' );
 
 }
 

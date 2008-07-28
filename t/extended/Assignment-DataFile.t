@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 6;
+use Test::More tests => 5;
 use Win32::OLE qw(in);
 use XML::Simple;
 
@@ -51,11 +51,6 @@ while ( my $assignment = $assign_iterator->() ) {
     like( $assignment->to_string(),
         qr/[\w\n]+/, 'to_string returns a string with new line characters' );
 
-    isa_ok(
-        $assignment->get_destination(),
-        'DTS::Assignment::Destination',
-        'get_destination returns a DTS::Assignment::Destination object'
-    );
 
 }
 

@@ -1,9 +1,8 @@
+use strict;
+use warnings;
 use XML::Simple;
 use Test::More tests => 5;
 use DTS::Application;
-use DTS::Assignment::Constant;
-use DTS::Assignment::Destination::Task;
-use Win32::OLE qw(in);
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();

@@ -2,12 +2,8 @@ use warnings;
 use strict;
 
 use Test::More tests => 5;
-use Win32::OLE qw(in);
 use XML::Simple;
-
 use DTS::Application;
-use DTS::Assignment::DataFile;
-use DTS::Assignment::Destination::Connection;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
@@ -50,7 +46,6 @@ while ( my $assignment = $assign_iterator->() ) {
 
     like( $assignment->to_string(),
         qr/[\w\n]+/, 'to_string returns a string with new line characters' );
-
 
 }
 

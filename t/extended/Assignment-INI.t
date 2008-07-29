@@ -4,8 +4,6 @@ use strict;
 use XML::Simple;
 use Test::More tests => 5;
 use DTS::Application;
-use DTS::Assignment::INI;
-use DTS::Assignment::Destination::Package;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();

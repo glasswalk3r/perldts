@@ -4,7 +4,7 @@ use strict;
 use Test::More;
 use XML::Simple;
 use DTS::Application;
-use DTS::Assignment::Destination::Connection;
+#use DTS::Assignment::Destination::Connection;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();

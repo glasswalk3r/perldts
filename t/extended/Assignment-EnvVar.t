@@ -4,8 +4,6 @@ use warnings;
 use XML::Simple;
 use Test::More tests => 5;
 use DTS::Application;
-use DTS::Assignment::EnvVar;
-use DTS::Assignment::Destination::GlobalVar;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();

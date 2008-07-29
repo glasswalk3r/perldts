@@ -50,7 +50,7 @@ use Data::Dumper;
 use Carp qw(confess);
 use Devel::AssertOS qw(MSWin32);
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head2 METHODS
 

@@ -11,15 +11,15 @@ my %config = (
         'Carp'             => 1.04,
         'DateTime'         => 0.35,
         'Class::Publisher' => 0.2,
-		'Devel::AssertOS'  => 0
+        'Devel::AssertOS'  => 0
     },
+    dist => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
     (
         $] >= 5.005
         ?    ## Add these new keywords supported since 5.005
           (
             ABSTRACT_FROM => 'lib/DTS.pm',    # retrieve abstract from module
-            AUTHOR =>
-              'Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>'
+            AUTHOR => 'Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>'
           )
         : ()
     ),

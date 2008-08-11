@@ -86,7 +86,7 @@ sub count_assignments {
 
 =head3 get_assignments
 
-Returns a interator, that, at each call, will return an C<DTS::Assignment> object until there are no more
+Returns a iterator, that, at each call, will return an C<DTS::Assignment> object until there are no more
 assignments in the C<DTS::Task::DynamicProperty>.
 
 See L</SYNOPSIS> to see an example of usage.

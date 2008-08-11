@@ -33,6 +33,7 @@ use DTS::TaskFactory;
 use DTS::Connection;
 use Win32::OLE qw(in);
 use DTS::DateTime;
+use DTS::Package::Step;
 use Hash::Util qw(lock_keys);
 use File::Spec;
 
@@ -63,11 +64,56 @@ Execute all the steps available in the package.
 Requires that the C<_sibling> attribute exists and is defined correctly, otherwise method call will abort program 
 execution.
 
-Returns a C<DTS::Package::Step::Result> object for error checking.
+Returns a array reference with C<DTS::Package::Step::Result> objects for error checking.
 
 =cut
 
 sub execute {
+
+    my $self = shift;
+
+    $self->get_sibling()->Execute();
+
+    my $iterator = $self->get_steps();
+
+    my @results;
+
+    while ( my $step = $iterator->() ) {
+
+        push( @results, $step->get_exec_error_info() );
+
+    }
+
+    return \@results;
+
+}
+
+=head3 get_steps
+
+Returns an iterator to get all steps defined inside the DTS package. Each call to the iterator will return a
+C<DTS::Package::Step> object until all steps are returned.
+
+=cut
+
+sub get_steps {
+
+    my $self = shift;
+
+    my $steps   = $self->get_sibling()->Steps;
+    my $total   = scalar( in($steps) );
+    my $counter = 0;
+
+    return sub {
+
+        return unless ( $counter < $total );
+
+        my $step = ( in($steps) )[$counter];
+
+        $counter++;
+
+        return DTS::Package::Step->new($step);
+
+      }
 
 }
 

@@ -21,31 +21,55 @@ Nothing.
 use 5.008008;
 use strict;
 use warnings;
-use Carp qw(confess);
 use base qw(DTS Class::Accessor);
+use Carp qw(confess);
+use Win32::OLE::Variant;
+use DTS::Package::Step::Result;
 
-__PACKAGE__->mk_ro_accessors(
-    qw( start_time task_name script_lang activex add_global_vars description exec_result exec_status exec_time finish_time func_name)
+__PACKAGE__->mk_accessors(
+    qw( name start_time task_name script_lang activex add_global_vars description exec_result exec_status exec_time finish_time func_name)
 );
 
 our $VERSION = '0.01';
 
 our %attrib_convertion = (
-    start_time      => 'StartTime',
-    task_name       => 'TaskName',
-    script_lang     => 'ScriptLanguage',
-    activex         => 'ActiveXScript',
-    add_global_vars => 'AddGlobalVariables',
-    close_conn      => 'CloseConnection',
-    commit_success  => 'CommitSuccess',
-    disable_step    => 'DisableStep',
-    description     => 'Description',
-    exec_result     => 'ExecutionResult',
-    exec_status     => 'ExecutionStatus',
-    exec_time       => 'ExecutionTime',
-    finish_time     => 'FinishTime',
-    func_name       => 'FunctionName'
+    start_time       => 'StartTime',
+    task_name        => 'TaskName',
+    script_lang      => 'ScriptLanguage',
+    activex          => 'ActiveXScript',
+    add_global_vars  => 'AddGlobalVariables',
+    close_conn       => 'CloseConnection',
+    commit_success   => 'CommitSuccess',
+    disable_step     => 'DisableStep',
+    description      => 'Description',
+    exec_result      => 'ExecutionResult',
+    exec_status_code => 'ExecutionStatus',
+    exec_time        => 'ExecutionTime',
+    finish_time      => 'FinishTime',
+    func_name        => 'FunctionName'
 );
+
+our @exec_status;
+
+$exec_status[4] = {
+    constant    => 'DTSStepExecStat_Completed',
+    description => 'Step execution is completed.'
+};
+
+$exec_status[3] = {
+    constant    => 'DTSStepExecStat_Inactive',
+    description => 'Step execution is inactive.'
+};
+
+$exec_status[2] = {
+    constant    => 'DTSStepExecStat_InProgress',
+    description => 'Step execution is in progress.'
+};
+
+$exec_status[1] = {
+    constant    => 'DTSStepExecStat_Waiting',
+    description => 'Step is waiting to execute.'
+};
 
 # :TODO:10/8/2008:AFRJr:
 # - all boolean properties must have get/set methods with descriptive names
@@ -147,7 +171,6 @@ sub _error_message {
 }
 
 # overriding Class::Accessor method to check for _sibling attribute
-
 sub set {
 
     my $self  = shift;
@@ -155,10 +178,59 @@ sub set {
     my $value = shift;
 
     confess $self->_error_message( $attrib_convertion{$key} )
-      unless ( $self->get_sibling() );
+      unless ( $self->is_sibling_ok() );
 
     $self->{key} = $value;
     $self->get_sibling()->{ $attrib_convertion{$key} } = $value;
+
+}
+
+=head3 get_exec_error_info
+
+Same as GetExecutionErrorInfo method from the original DTS Step object.
+
+Returns a C<DTS::Package::Step::Result> object. It will fail if the sibling object is not available.
+
+=cut
+
+sub get_exec_error_info {
+
+    my $self = shift;
+
+    confess
+"Cannot execute get_exec_error_info without a reference to the original DTS Step object"
+      unless ( $self->is_sibling_ok() );
+
+    my $error_code  = Variant( VT_I4 | VT_BYREF,   '-1' );
+    my $source      = Variant( VT_BSTR | VT_BYREF, '' );
+    my $description = Variant( VT_BSTR | VT_BYREF, '' );
+
+    $self->get_sibling()
+      ->GetExecutionErrorInfo( $error_code, $source, $description );
+
+    return DTS::Package::Step::Result->new(
+        {
+            error_code  => $error_code,
+            source      => $source,
+            description => $description,
+            step_name   => $self->get_name(),
+            is_success  => $self->get_exec_status()
+        }
+    );
+
+}
+
+=head3 get_exec_status
+
+Returns a string telling the execution status instead of a numeric code as C<get_exec_status_code> does.
+
+Convertion table was fetched from MSDN documentation.
+
+=cut
+
+sub get_exec_status {
+
+    my $self = shift;
 
 }
 

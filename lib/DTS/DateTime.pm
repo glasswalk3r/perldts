@@ -22,8 +22,6 @@ use 5.008008;
 use strict;
 use warnings;
 use base qw(DateTime);
-use Carp qw(confess);
-use Win32::OLE::Variant;
 
 our $VERSION = '0.01';
 
@@ -39,6 +37,7 @@ sub new {
     my $variant_timestamp = shift;
 
     my $self = $class->SUPER::new(
+
         year   => $variant_timestamp->Date('yyyy'),
         month  => $variant_timestamp->Date('M'),
         day    => $variant_timestamp->Date('d'),

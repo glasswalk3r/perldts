@@ -2,7 +2,7 @@ package DTS::Package::Step;
 
 =head1 NAME
 
-DTS::Task - a Perl class to access Microsoft SQL Server 2000 DTS Package's steps 
+DTS::Step - a Perl class to access Microsoft SQL Server 2000 DTS Package's steps 
 
 =head1 SYNOPSIS
 
@@ -231,6 +231,8 @@ Convertion table was fetched from MSDN documentation.
 sub get_exec_status {
 
     my $self = shift;
+
+    return $exec_status[ $self->get_exec_status_code() ]->{description};
 
 }
 

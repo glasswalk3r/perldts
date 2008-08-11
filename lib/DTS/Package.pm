@@ -32,12 +32,11 @@ use base qw(Class::Accessor DTS);
 use DTS::TaskFactory;
 use DTS::Connection;
 use Win32::OLE qw(in);
-use Win32::OLE::Variant;
-use DateTime;
+use DTS::DateTime;
 use Hash::Util qw(lock_keys);
 use File::Spec;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(
@@ -53,14 +52,22 @@ sub _init_creation_date {
     my $self              = shift;
     my $variant_timestamp = shift;
 
-    $self->{creation_date} = DateTime->new(
-        year   => $variant_timestamp->Date('yyyy'),
-        month  => $variant_timestamp->Date('M'),
-        day    => $variant_timestamp->Date('d'),
-        hour   => $variant_timestamp->Time('H'),
-        minute => $variant_timestamp->Time('m'),
-        second => $variant_timestamp->Time('s'),
-    );
+    $self->{creation_date} = DTS::DateTime->new($variant_timestamp);
+
+}
+
+=head3 execute
+
+Execute all the steps available in the package.
+
+Requires that the C<_sibling> attribute exists and is defined correctly, otherwise method call will abort program 
+execution.
+
+Returns a C<DTS::Package::Step::Result> object for error checking.
+
+=cut
+
+sub execute {
 
 }
 

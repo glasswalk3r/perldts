@@ -81,6 +81,31 @@ sub get_sibling {
 
 }
 
+=head3 is_sibling_ok
+
+Validates if the attribute _sibling is defined and has a valid value. Returns true if it's ok, false otherwise.
+
+=cut
+
+sub is_sibling_ok {
+
+    my $self = shift;
+
+    if (    ( exists( $self->{_sibling} ) )
+        and ( $self->{_sibling}->isa('Win32::OLE') ) )
+    {
+
+        return 1;
+
+    }
+    else {
+
+        return 0;
+
+    }
+
+}
+
 =head3 kill_sibling
 
 This method will simple delete the key (or attribute, if you prefer) C<_sibling> from the hash reference used by all classes that inherints from

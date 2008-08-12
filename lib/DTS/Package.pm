@@ -46,17 +46,6 @@ __PACKAGE__->mk_ro_accessors(
 
 =head2 METHODS
 
-=cut
-
-sub _init_creation_date {
-
-    my $self              = shift;
-    my $variant_timestamp = shift;
-
-    $self->{creation_date} = DTS::DateTime->new($variant_timestamp);
-
-}
-
 =head3 execute
 
 Execute all the steps available in the package.
@@ -162,25 +151,27 @@ sub new {
 
     bless $self, $class;
 
-    $self->{auto_commit}      = $self->get_sibling->AutoCommitTransaction;
-    $self->{creator_computer} = $self->get_sibling->CreatorComputerName;
-    $self->{description}      = $self->get_sibling->Description;
-    $self->{fail_on_error}    = $self->get_sibling->FailOnError;
-    $self->{log_file}         = $self->get_sibling->LogFileName;
-    $self->{max_steps}        = $self->get_sibling->MaxConcurrentSteps;
-    $self->{name}             = $self->get_sibling->Name;
-    $self->{id}               = $self->get_sibling->PackageID;
-    $self->{version_id}       = $self->get_sibling->VersionID;
+    $self->{auto_commit}      = $self->get_sibling()->AutoCommitTransaction;
+    $self->{creator_computer} = $self->get_sibling()->CreatorComputerName;
+    $self->{description}      = $self->get_sibling()->Description;
+    $self->{fail_on_error}    = $self->get_sibling()->FailOnError;
+    $self->{log_file}         = $self->get_sibling()->LogFileName;
+    $self->{max_steps}        = $self->get_sibling()->MaxConcurrentSteps;
+    $self->{name}             = $self->get_sibling()->Name;
+    $self->{id}               = $self->get_sibling()->PackageID;
+    $self->{version_id}       = $self->get_sibling()->VersionID;
     $self->{nt_event_log} =
       $self->{_sibling}->WriteCompletionStatusToNTEventLog;
 
-    $self->{log_to_server}        = $self->get_sibling->LogToSQLServer;
-    $self->{explicit_global_vars} = $self->get_sibling->ExplicitGlobalVariables;
+    $self->{log_to_server} = $self->get_sibling()->LogToSQLServer;
+    $self->{explicit_global_vars} =
+      $self->get_sibling()->ExplicitGlobalVariables;
 
     $self->_set_lineage_opts();
     $self->_set_priority();
 
-    $self->_init_creation_date( $self->get_sibling->CreationDate );
+    $self->{creation_date} =
+      DTS::DateTime->new( $self->get_sibling()->CreationDate );
 
     lock_keys( %{$self} );
 

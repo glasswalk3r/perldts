@@ -22,6 +22,7 @@ use 5.008008;
 use strict;
 use warnings;
 use base qw(DateTime);
+use Carp qw(confess);
 
 our $VERSION = '0.01';
 
@@ -33,8 +34,11 @@ our $VERSION = '0.01';
 
 sub new {
 
-	my $class = shift;
+    my $class             = shift;
     my $variant_timestamp = shift;
+
+    confess "Must receive an data Variant object as a parameter"
+      unless ( $variant_timestamp->isa('Win32::OLE::Variant') );
 
     my $self = $class->SUPER::new(
 
@@ -46,10 +50,9 @@ sub new {
         second => $variant_timestamp->Time('s'),
     );
 
-	return $self;
+    return $self;
 
 }
-
 
 1;
 

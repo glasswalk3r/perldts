@@ -41,11 +41,14 @@ use Win32::OLE::Variant;
 use DTS::Package::Step::Result;
 use DTS::DateTime;
 
+__PACKAGE__->follow_best_practice();
+
 __PACKAGE__->mk_accessors(
-    qw( name task_name script_lang activex add_global_vars description exec_result exec_status func_name)
+    qw( name task_name script_lang activex add_global_vars description func_name)
 );
 
-__PACKAGE__->mk_ro_accessors(qw(start_time exec_time finish_time));
+__PACKAGE__->mk_ro_accessors(
+    qw(exec_status_code start_time exec_time finish_time exec_result));
 
 our $VERSION = '0.01';
 
@@ -115,8 +118,13 @@ sub new {
         # building DateTime objects with Variant date/time values
         if ( $attrib =~ /_time$/ ) {
 
+            my $variant = $sibling->{ $attrib_convertion{$attrib} };
+
+# :TRICKY:12/8/2008:arfreitas: if the step was never executed, the ExecutionTime will be equal 0.
             $self->{$attrib} =
-              DTS::DateTime->new( $sibling->{ $attrib_convertion{$attrib} } );
+                ($variant)
+              ? ( DTS::DateTime->new($variant) )
+              : ('Does not exist');
 
             next;
 
@@ -258,11 +266,15 @@ sub get_exec_error_info {
 
     return DTS::Package::Step::Result->new(
         {
-            error_code  => $error_code,
-            source      => $source,
-            description => $description,
+            error_code  => $error_code->Value(),
+            source      => $source->Value(),
+            description => $description->Value(),
             step_name   => $self->get_name(),
-            is_success  => $self->get_exec_status()
+
+# :TRICKY:12/8/2008:arfreitas: SQL Server documentation says that success is zero, failure is 1
+# and this is different from Perl true/false meaning
+            is_success => ( $self->get_exec_result() == 0 ) ? 1 : 0, 
+			exec_status => $self->get_exec_status()
         }
     );
 
@@ -280,7 +292,7 @@ sub get_exec_status {
 
     my $self = shift;
 
-    return $exec_status[ $self->get_exec_status_code() ]->{description};
+    return $exec_status[ $self->get_exec_status_code() ];
 
 }
 

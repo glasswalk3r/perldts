@@ -24,8 +24,11 @@ use warnings;
 use base qw(Class::Accessor);
 use Carp qw(confess);
 use XML::Simple;
+use Params::Validate qw(validate :types);
 
-__PACKAGE__->mk_ro_accessors(qw(step_name error_code source description));
+__PACKAGE__->follow_best_practice();
+__PACKAGE__->mk_ro_accessors(
+    qw(exec_status step_name error_code source description));
 
 our $VERSION = '0.01';
 
@@ -38,7 +41,20 @@ our $VERSION = '0.01';
 sub new {
 
     my $class = shift;
-    my $self  = shift;
+
+    validate(
+        @_,
+        {
+            error_code  => { type => SCALAR },
+            source      => { type => SCALAR },
+            description => { type => SCALAR },
+            step_name   => { type => SCALAR },
+            is_success  => { type => SCALAR, regex => qr/[10]/ },
+            exec_status => { type => SCALAR }
+        }
+    );
+
+    my $self = shift;
 
     bless $self, $class;
 
@@ -48,7 +64,7 @@ sub new {
 
 =head3 to_string
 
-Returns a string describing the values of C<step_name>,  C<error_code>,  C<description> and C<is_success> attributes.
+Returns the C<DTS:Package::Step::Result> as a pure text content. Useful for simple reports.
 
 =cut
 
@@ -56,39 +72,21 @@ sub to_string {
 
     my $self = shift;
 
-    return 'Step "'
-      . $self->get_step_name()
-      . '" has '
-      . ( $self->is_success() )
-      ? 'successed'
-      : 'failed'
-      . ' with the following conditions:'
-      . "\nError code: "
-      . $self->get_error_code()
-      . "\nDescription: "
-      . $self->get_description();
+    my @attrib_names = keys( %{$self} );
+
+    foreach my $attrib_name (@attrib_names) {
+
+        print "$attrib_name => $self->{$attrib_name}\n";
+
+    }
 
 }
 
-sub to_html {
+=head3 to_xml
 
-    my $self = shift;
+Returns the C<DTS:Package::Step::Result> as an XML content.
 
-    my $content =
-        '<html><head><title>Result of Step '
-      . $self->get_step_name()
-      . ' execution</title><body><h1>Result of Step '
-      . $self->get_step_name()
-      . ' execution</h1><p>Execution is: '
-      . ( $self->is_success() )
-      ? 'successed.</p>'
-      : 'failed with the following conditions:</p><table><tr><td>Error code</td><td>'
-      . $self->get_error_code()
-      . '</td></tr><tr><td>Description</td><td>'
-      . $self->get_description()
-      . '</td></tr></table></body></html>';
-
-}
+=cut
 
 sub to_xml {
 
@@ -117,11 +115,7 @@ __END__
 =over
 
 =item *
-L<Win32::OLE> at C<perldoc>.
-
-=item *
-MSDN on Microsoft website and MS SQL Server 2000 Books Online are a reference about using DTS'
-object hierarchy, but one will need to convert examples written in VBScript to Perl code.
+C<DTS::Package::Step> documentation.
 
 =back
 

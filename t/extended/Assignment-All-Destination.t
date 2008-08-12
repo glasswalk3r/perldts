@@ -4,6 +4,7 @@ use strict;
 use Test::More;
 use XML::Simple;
 use DTS::Application;
+
 #use DTS::Assignment::Destination::Connection;
 
 my $xml_file = 'test-config.xml';
@@ -22,24 +23,19 @@ my $assign_iterator = $dyn_props->get_assignments();
 
 while ( my $assignment = $assign_iterator->() ) {
 
-  TODO: {
+    my $destination = $assignment->get_destination();
 
-        local $TODO =
-          'Tests for DTS::Assignment::Destination classes are not finished';
+    isa_ok( $destination, 'DTS::Assignment::Destination',
+        'destination is a subclass from DTS::Assignment::Destination superclass'
+    );
 
-        isa_ok(
-            $assignment->get_destination(),
-            'DTS::Assignment::Destination',
-            'get_destination returns a DTS::Assignment::Destination object'
-        );
+    like(
+        $destination->get_raw_string(),
+        qr/^(\'[\w\s\(\)]+\'\;\'[\w\s\(\)]+\')(\'[\w\s\(\)]+\')*/,
+        'get_raw_string returns a valid string'
+    );
 
-        like( $assignment->get_destination,
-            qr/[\w\;\(\)\s]+$/,
-            'get_destination returns a string with semicolons characters' );
-
-        #and test other methods
-
-    }
+    #and test other methods
 
 }
 

@@ -160,6 +160,9 @@ __END__
 
 =head1 CAVEATS
 
+All objects under DTS distribution cannot be created without a reference to the original DTS object they mimic: at
+the current development state, object can only be recovered from a MS SQL Server database.
+
 The I<sibling> object, kept as an reference, sometimes is quite annoying. This because the MS SQL Server API uses
 a lot of indirection. Using L<Data::Dumper|Data::Dumper>, for example, seems impossible. Using the C<x> (eval) 
 command in the debugger sometimes also shows a interesting visual effect, but is equally useless (setting 

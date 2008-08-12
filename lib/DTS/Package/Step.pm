@@ -150,8 +150,7 @@ sub is_disable {
 
 =head3 disable_step
 
-Disables the step. This changes the C<DTS::Package> object, that must have it's appropriate methods to save it's state
-back to the server (or file).
+Disables the step. 
 
 Abort program execution if the C<_sibling> attribute is not defined.
 
@@ -161,7 +160,7 @@ sub disable_step {
 
     my $self = shift;
 
-    unless ( exists( $self->{_sibling} ) ) {
+    unless ( $self->is_sibling_ok() ) {
 
         confess $self->_error_message('DisableStep');
 
@@ -188,7 +187,7 @@ sub enable_step {
 
     my $self = shift;
 
-    unless ( exists( $self->{_sibling} ) ) {
+    unless ( $self->is_sibling_ok() ) {
 
         confess $self->_error_message('DisableStep');
 
@@ -285,9 +284,141 @@ sub get_exec_status {
 
 }
 
+=head3 add_global_vars
+
+Returns true if the property AddGlobalVariables is enabled, false otherwise.
+
+=cut
+
+sub add_global_vars {
+
+    my $self = shift;
+
+    return $self->{add_global_vars};
+
+}
+
+=head3 enable_global_vars
+
+Enable the property AddGlobalVariables.
+
+=cut
+
+sub enable_global_vars {
+
+    my $self = shift;
+
+    unless ( $self->is_sibling_ok() ) {
+
+        confess $self->_error_message('AddGlobalVariables');
+
+    }
+    else {
+
+        $self->{add_global_vars} = 1;
+        $self->get_sibling()->{AddGlobalVariables} = 1;
+
+    }
+
+}
+
+=head3 disable_global_vars
+
+Disable the property AddGlobalVariables.
+
+=cut
+
+sub disable_global_vars {
+
+    my $self = shift;
+
+    unless ( $self->is_sibling_ok() ) {
+
+        confess $self->_error_message('AddGlobalVariables');
+
+    }
+    else {
+
+        $self->{disable_global_vars} = 0;
+        $self->get_sibling()->{AddGlobalVariables} = 0;
+
+    }
+
+}
+
+=head3 close_conn
+
+Returns true if the CloseConnection attribute is active, false otherwise.
+
+=cut
+
+sub close_conn {
+
+    my $self = shift;
+
+    return $self->{close_conn};
+
+}
+
+=head3 enable_close_conn
+
+Enables the CloseConnection attribute.
+
+=cut
+
+sub enable_close_conn {
+
+    my $self = shift;
+
+    unless ( $self->is_sibling_ok() ) {
+
+        confess $self->error_message('CloseConnection');
+
+    }
+    else {
+
+        $self->{close_conn} = 1;
+        $self->get_sibling()->{CloseConnection} = 1;
+
+    }
+
+}
+
+=head3 disable_close_conn
+
+Disables the CloseConnection attribute.
+
+=cut
+
+sub disable_close_conn {
+
+    my $self = shift;
+
+    unless ( $self->is_sibling_ok() ) {
+
+        confess $self->error_message('CloseConnection');
+
+    }
+    else {
+
+        $self->{close_conn} = 0;
+        $self->get_sibling()->{CloseConnection} = 0;
+
+    }
+
+}
+
 1;
 
 __END__
+
+=head1 CAVEATS
+
+Any change to C<DTS::Package::Step> must be saved by using the proper methods in the C<DTS::Package> object or they
+will be lost as soons as the Step object is eliminated by the garbage collector.
+
+All methods that changes object state and needs to sincronize with the original DTS Package Step object will abort
+program execution if the C<_sibling> attribute does not exists or does not have a valid value.
 
 =head1 SEE ALSO
 

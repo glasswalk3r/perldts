@@ -58,6 +58,7 @@ t/extended/Assignment-Query.t
 t/extended/Assignment.t
 t/extended/Task-Datapump.t
 t/Package.t
+t/extended/Package.t
 t/Task-DataPump.t
 t/Task-DynamicProperty.t
 t/Task-ExecutePackage.t

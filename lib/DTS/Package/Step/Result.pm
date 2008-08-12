@@ -23,6 +23,7 @@ use strict;
 use warnings;
 use base qw(Class::Accessor);
 use Carp qw(confess);
+use XML::Simple;
 
 __PACKAGE__->mk_ro_accessors(qw(step_name error_code source description));
 
@@ -71,9 +72,31 @@ sub to_string {
 
 sub to_html {
 
+    my $self = shift;
+
+    my $content =
+        '<html><head><title>Result of Step '
+      . $self->get_step_name()
+      . ' execution</title><body><h1>Result of Step '
+      . $self->get_step_name()
+      . ' execution</h1><p>Execution is: '
+      . ( $self->is_success() )
+      ? 'successed.</p>'
+      : 'failed with the following conditions:</p><table><tr><td>Error code</td><td>'
+      . $self->get_error_code()
+      . '</td></tr><tr><td>Description</td><td>'
+      . $self->get_description()
+      . '</td></tr></table></body></html>';
+
 }
 
 sub to_xml {
+
+    my $self = shift;
+
+    my $xs = XML::Simple->new();
+
+    return $xs->XMLout($self);
 
 }
 

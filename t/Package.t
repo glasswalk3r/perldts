@@ -5,6 +5,8 @@ can_ok(
     'DTS::Package',
     qw(log_to_server
       auto_commit
+	  execute
+	  get_steps
       new
       use_explicit_global_vars
       use_event_log

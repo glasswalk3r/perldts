@@ -44,7 +44,7 @@ use DTS::DateTime;
 __PACKAGE__->follow_best_practice();
 
 __PACKAGE__->mk_accessors(
-    qw( name task_name script_lang activex add_global_vars description func_name)
+    qw(name task_name script_lang activex add_global_vars description func_name)
 );
 
 __PACKAGE__->mk_ro_accessors(
@@ -71,7 +71,8 @@ our %attrib_convertion = (
     is_rowset_provider => 'IsPackageDSORowset',
     join_transaction   => 'JoinTransactionIfPresent',
     relative_priority  => 'RelativePriority',
-    rollback_failure   => 'RollbackFailure'
+    rollback_failure   => 'RollbackFailure',
+    fail_on_error      => 'FailPackageOnError'
 );
 
 our @exec_status;
@@ -222,7 +223,7 @@ sub _error_message {
     my $attrib_name = shift;
 
     return
-"Cannot update $attrib_name because there is no reference to the original DTS Step object";
+"Cannot update $attrib_name because there is no reFailPackageOnErrorference to the original DTS Step object";
 
 }
 
@@ -273,8 +274,8 @@ sub get_exec_error_info {
 
 # :TRICKY:12/8/2008:arfreitas: SQL Server documentation says that success is zero, failure is 1
 # and this is different from Perl true/false meaning
-            is_success => ( $self->get_exec_result() == 0 ) ? 1 : 0, 
-			exec_status => $self->get_exec_status()
+            is_success => ( $self->get_exec_result() == 0 ) ? 1 : 0,
+            exec_status => $self->get_exec_status()
         }
     );
 
@@ -415,6 +416,68 @@ sub disable_close_conn {
 
         $self->{close_conn} = 0;
         $self->get_sibling()->{CloseConnection} = 0;
+
+    }
+
+}
+
+=head3 fail_on_error 
+
+Returns true if the FailPackageOnError attribute is active, false otherwise.
+
+=cut
+
+sub fail_on_error {
+
+    my $self = shift;
+
+    return $self->{fail_on_error};
+
+}
+
+=head3 enable_fail_on_error
+
+Enables the FailPackageOnError attribute.
+
+=cut
+
+sub enable_fail_on_error {
+
+    my $self = shift;
+
+    unless ( $self->is_sibling_ok() ) {
+
+        confess $self->error_message('FailPackageOnError');
+
+    }
+    else {
+
+        $self->{fail_on_error} = 1;
+        $self->get_sibling()->{FailPackageOnError} = 1;
+
+    }
+
+}
+
+=head3 disable_fail_on_error
+
+Enables the FailPackageOnError attribute.
+
+=cut
+
+sub disable_fail_on_error {
+
+    my $self = shift;
+
+    unless ( $self->is_sibling_ok() ) {
+
+        confess $self->error_message('FailPackageOnError');
+
+    }
+    else {
+
+        $self->{fail_on_error} = 0;
+        $self->get_sibling()->{FailPackageOnError} = 0;
 
     }
 

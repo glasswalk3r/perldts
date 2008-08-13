@@ -25,6 +25,7 @@ use base qw(Class::Accessor);
 use Carp qw(confess);
 use XML::Simple;
 use Params::Validate qw(validate :types);
+use Hash::Util qw(lock_keys);
 
 __PACKAGE__->follow_best_practice();
 __PACKAGE__->mk_ro_accessors(
@@ -35,6 +36,30 @@ our $VERSION = '0.01';
 =head2 METHODS
 
 =head3 new
+
+Instantiates a new C<DTS::Package::Step::Result>. Expects as a parameter a hash reference with the following keys:
+
+=over
+
+=item *
+error_code: scalar value.
+
+=item *
+source: scalar value.
+
+=item *
+description: scalar value.
+
+=item *
+step_name: scalar value.
+
+=item *
+is_success: "boolean". Accepts 0 or 1.
+
+=item *
+exec_status: scalar value.
+
+=back
 
 =cut
 
@@ -49,7 +74,7 @@ sub new {
             source      => { type => SCALAR },
             description => { type => SCALAR },
             step_name   => { type => SCALAR },
-            is_success  => { type => SCALAR, regex => qr/[10]/ },
+            is_success  => { type => SCALAR, regex => qr/[10]{1}/ },
             exec_status => { type => SCALAR }
         }
     );
@@ -57,6 +82,8 @@ sub new {
     my $self = shift;
 
     bless $self, $class;
+
+    lock_keys( %{$self} );
 
     return $self;
 
@@ -74,11 +101,15 @@ sub to_string {
 
     my @attrib_names = keys( %{$self} );
 
+	my $string;
+
     foreach my $attrib_name (@attrib_names) {
 
-        print "$attrib_name => $self->{$attrib_name}\n";
+        $string .= "$attrib_name => $self->{$attrib_name}\n";
 
     }
+
+	return $string;
 
 }
 
@@ -97,6 +128,12 @@ sub to_xml {
     return $xs->XMLout($self);
 
 }
+
+=head3 is_success
+
+Returns true if the step was executed successfully.
+
+=cut
 
 sub is_success {
 

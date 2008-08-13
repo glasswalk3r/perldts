@@ -14,3 +14,8 @@ requires:
 
 distribution_type: module
 generated_by: ExtUtils::MakeMaker version 6.30
+resources:
+    license: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+    homepage: http://code.google.com/p/perldts/
+    bugtracker: http://code.google.com/p/perldts/issues/list
+    repository: http://code.google.com/p/perldts/source/browse/

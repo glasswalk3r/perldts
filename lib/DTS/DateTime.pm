@@ -7,10 +7,19 @@ DTS::DateTime - DateTime Perl object built from Win32::OLE Variant values
 =head1 SYNOPSIS
 
     use DTS::DateTime;
+	use Win32::OLE::Variant;
+
+	my $variant = Variant( VT_DATE, "April 1 99" );
+
+	my $date = DTS::DateTime->new($variant);
 
 =head1 DESCRIPTION
 
-Something
+Extends the DateTime class constructor (new method) to create a DateTime object that is equal to a 
+C<Win32::OLE::Variant> object.
+
+Some classes in C<DTS> distribution have methods that returns date/time values, but as Variants. C<DTS::DateTime> objects
+are used as substitutes.
 
 =head2 EXPORT
 
@@ -22,7 +31,7 @@ use 5.008008;
 use strict;
 use warnings;
 use base qw(DateTime);
-use Carp qw(confess);
+use Params::Validate qw(validate_pos);
 
 our $VERSION = '0.01';
 
@@ -30,15 +39,17 @@ our $VERSION = '0.01';
 
 =head3 new
 
+Expects a C<Win32::OLE::Variant> date object as a parameter.
+
 =cut
 
 sub new {
 
-    my $class             = shift;
-    my $variant_timestamp = shift;
+    my $class = shift;
 
-    confess "Must receive an data Variant object as a parameter"
-      unless ( $variant_timestamp->isa('Win32::OLE::Variant') );
+    validate_pos( @_, { isa => 'Win32::OLE::Variant' } );
+
+    my $variant_timestamp = shift;
 
     my $self = $class->SUPER::new(
 
@@ -67,7 +78,10 @@ MSDN on Microsoft website and MS SQL Server 2000 Books Online are a reference ab
 object hierarchy, but you will need to convert examples written in VBScript to Perl code.
 
 =item *
-L<DTS::Task|DTS::Task> and it's subclasses modules.
+L<DateTime>.
+
+=item *
+L<Win32::OLE::Variant>.
 
 =back
 

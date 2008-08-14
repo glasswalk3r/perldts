@@ -117,7 +117,7 @@ sub new {
     foreach my $attrib ( keys(%attrib_convertion) ) {
 
         # building DateTime objects with Variant date/time values
-        if ( $attrib =~ /_time$/ ) {
+        if ( ( $attrib eq 'start_time' ) or ( $attrib eq 'finish_time' ) ) {
 
             my $variant = $sibling->{ $attrib_convertion{$attrib} };
 
@@ -142,6 +142,59 @@ sub new {
     return $self;
 
 }
+
+=head3 read and write attributes
+
+The following attributes have their C<get_>/C<set_> methods available (for example, C<name> attribute will have a 
+C<get_name> and C<set_name> methods):
+
+=over
+
+=item *
+name
+
+=item *
+task_name
+
+=item *
+script_lang
+
+=item *
+activex
+
+=item *
+add_global_vars
+
+=item *
+description
+
+=item *
+func_name
+
+=back
+
+=head3 read only attributes 
+
+The following attributes are read only, so they will have only C<get_> attributes:
+
+=over
+
+=item *
+exec_status_code
+
+=item *
+start_time
+
+=item *
+exec_time
+
+=item *
+finish_time
+
+=item *
+exec_result
+
+=back
 
 =head3 is_disable 
 
@@ -223,7 +276,7 @@ sub _error_message {
     my $attrib_name = shift;
 
     return
-"Cannot update $attrib_name because there is no reFailPackageOnErrorference to the original DTS Step object";
+"Cannot update $attrib_name because there is no FailPackageOnError reference to the original DTS Step object";
 
 }
 

@@ -63,24 +63,29 @@ __PACKAGE__->mk_ro_accessors(
     qw(message_text cc_line attachments profile_password profile subject to_line)
 );
 
+our %attrib_convertion = (
+    cc_line          => 'CCLine',
+    attachments      => 'FileAttachments',
+    message_text     => 'MessageText',
+    profile_password => 'Password',
+    profile          => 'Profile',
+    save_sent        => 'SaveMailInSentItemsFolder',
+    is_nt_service    => 'IsNTService',
+    subject          => 'Subject',
+    to_line          => 'ToLine'
+);
+
 sub new {
 
     my $class = shift;
     my $self  = $class->SUPER::new(@_);
 
-    $self->{cc_line} = $self->get_sibling->Properties->Parent->CCLine;
-    $self->{attachments} =
-      $self->get_sibling->Properties->Parent->FileAttachments;
-    $self->{message_text} = $self->get_sibling->Properties->Parent->MessageText;
-    $self->{profile_password} =
-      $self->get_sibling->Properties->Parent->Password;
-    $self->{profile} = $self->get_sibling->Properties->Parent->Profile;
-    $self->{save_sent} =
-      $self->get_sibling->Properties->Parent->SaveMailInSentItemsFolder;
-    $self->{is_nt_service} =
-      $self->get_sibling->Properties->Parent->IsNTService;
-    $self->{subject} = $self->get_sibling->Properties->Parent->Subject;
-    $self->{to_line} = $self->get_sibling->Properties->Parent->ToLine;
+    my $sibling = $self->get_sibling();
+
+    foreach my $attrib ( keys(%attrib_convertion) ) {
+
+        $self->{$attrib} = $sibling->{ $attrib_convertion{$attrib} };
+    }
 
     lock_keys( %{$self} );
 
@@ -180,6 +185,11 @@ Returns a string with the subject of the email
 
 Returns a string with all email addresses defined in the I<To> field of the email. Addresses are separated by
 semicolon characters.
+
+=head1 CAVEATS
+
+This class is incomplete. The methods defined for the original SendMailTask class are not defined here, except for
+those used as get/setter methods.
 
 =head1 SEE ALSO
 

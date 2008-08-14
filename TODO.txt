@@ -1,12 +1,1 @@
-include tests for the new classes:
-- DTS::Package::Step
-- DTS::Package::Step::Result
-- DTS::DateTime
-
-include extended tests for the new classes:
-- DTS::Package::Step
-- DTS::Package::Step::Result
-
-include tests for the new methods for DTS::Package class
-
 modify methods that returns collections to return a iterator instead of all objects at once

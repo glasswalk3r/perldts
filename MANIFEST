@@ -48,6 +48,7 @@ t/AssignmentFactory.t
 t/AssignmentTypes.t
 t/Connection.t
 t/Credential.t
+t/DateTime.t
 t/extended/Application.t
 t/extended/Assignment-Constant.t
 t/extended/Assignment-DataFile.t
@@ -63,6 +64,7 @@ t/Task-DataPump.t
 t/Task-DynamicProperty.t
 t/Task-ExecutePackage.t
 t/Task-SendEmail.t
+t/extended/Task-SendEmail.t
 t/Task.t
 t/TaskFactory.t
 test-all.dts

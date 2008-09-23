@@ -1,0 +1,5 @@
+Changes from release 0.04:
+- added DTS::DateTime module
+- added DTS::Package::Step module
+- added DTS::Package::Step::Result module
+- now a DTS package can be executed and has it's results fetched!

@@ -44,7 +44,7 @@ use DTS::DateTime;
 __PACKAGE__->follow_best_practice();
 
 __PACKAGE__->mk_accessors(
-    qw(name task_name script_lang activex add_global_vars description func_name)
+    qw(name task_name script_lang activex description func_name)
 );
 
 __PACKAGE__->mk_ro_accessors(
@@ -161,9 +161,6 @@ script_lang
 
 =item *
 activex
-
-=item *
-add_global_vars
 
 =item *
 description

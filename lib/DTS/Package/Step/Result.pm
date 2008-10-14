@@ -2,7 +2,7 @@ package DTS::Package::Step::Result;
 
 =head1 NAME
 
-DTS::Task - a Perl class to represent a DTS Package Step execution result.
+DTS::Package::Step::Result - a Perl class to represent a DTS Package Step execution result.
 
 =head1 SYNOPSIS
 

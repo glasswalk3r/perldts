@@ -13,7 +13,16 @@ my %config = (
         'Class::Publisher' => 0.2,
         'Devel::AssertOS'  => 0
     },
-    dist => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
+    META_MERGE => {
+        resources => {
+            license  => 'http://www.gnu.org/licenses/old-licenses/gpl-2.0.html',
+            homepage => 'http://code.google.com/p/perldts/',
+            bugtracker => 'http://code.google.com/p/perldts/issues/list',
+            repository => 'http://code.google.com/p/perldts/source/browse/'
+        },
+    },
+    LICENSE => 'GNU General Public License (GPL)',
+    dist    => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
     (
         $] >= 5.005
         ?    ## Add these new keywords supported since 5.005

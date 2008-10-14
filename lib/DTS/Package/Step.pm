@@ -2,7 +2,7 @@ package DTS::Package::Step;
 
 =head1 NAME
 
-DTS::Step - a Perl class to access Microsoft SQL Server 2000 DTS Package's steps 
+DTS::Package::Step - a Perl class to access Microsoft SQL Server 2000 DTS Package's steps 
 
 =head1 SYNOPSIS
 
@@ -89,9 +89,6 @@ $relative_priority[2] = 'Below normal thread priority';
 $relative_priority[5] = 'Highest thread priority';
 $relative_priority[1] = 'Lowest thread priority';
 $relative_priority[3] = 'Normal thread priority';
-
-# :TODO:10/8/2008:AFRJr:
-# - all boolean properties must have get/set methods with descriptive names
 
 =head2 METHODS
 

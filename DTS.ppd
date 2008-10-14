@@ -1,4 +1,4 @@
-<SOFTPKG NAME="DTS" VERSION="0,05,0,0">
+<SOFTPKG NAME="DTS" VERSION="0,06,0,0">
     <TITLE>DTS</TITLE>
     <ABSTRACT>Perl classes to access Microsoft SQL Server 2000 DTS Packages </ABSTRACT>
     <AUTHOR>Alceu Rodrigues de Freitas Junior &lt;arfreitas@cpan.org&gt;</AUTHOR>
@@ -9,6 +9,6 @@
         <DEPENDENCY NAME="Devel-CheckOS" VERSION="0,0,0,0" />
         <OS NAME="MSWin32" />
         <ARCHITECTURE NAME="MSWin32-x86-multi-thread-5.8" />
-        <CODEBASE HREF="DTS-0.05.tar.gz" />
+        <CODEBASE HREF="DTS-0.06.tar.gz" />
     </IMPLEMENTATION>
 </SOFTPKG>

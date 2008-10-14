@@ -35,6 +35,12 @@ as L<Test::More|Test::More> (see EXAMPLES directory in the tarball distribution 
 Current development state should be considered BETA, despite the API is already usable. There is a high chance that the
 interface changes during next releases, so be careful when updating.
 
+=head2 IMPORTANT
+
+C<DTS> distribution will be moved to a new registered namespace: C<Win32::SqlServer::DTS>, so release 0.05 will be the last
+release available in the distribution name C<DTS>. All new versions will be available in the new namespace, but I intend to
+maintain the C<DTS> distribution for a while before removing it from CPAN (and send it to Backpan).
+
 =head2 EXPORT
 
 Nothing.
@@ -48,7 +54,7 @@ use Data::Dumper;
 use Carp qw(confess);
 use Devel::AssertOS qw(MSWin32);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head2 METHODS
 

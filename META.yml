@@ -1,5 +1,4 @@
 # http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         DTS
 version:      0.06
 version_from: lib/DTS.pm
@@ -12,7 +11,7 @@ requires:
     Hash::Util:                    0.05
     Win32::OLE:                    0.1704
 author: Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>
-license: GNU General Public License (GPL)
+license: GNU GPL
 distribution_type: module
 generated_by: ExtUtils::MakeMaker version 6.30
 resources:

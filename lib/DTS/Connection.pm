@@ -20,11 +20,11 @@ DTS::Connection - a Perl class to represent a Microsoft SQL Server 2000 DTS Conn
     my $package = $app->get_db_package(
         { id => '', version_id => '', name => 'some_package', package_password => '' } );
 
-    my $conns_ref = $package->get_connections;
+    my $iterator = $package->get_connections();
 
-    foreach my $conn (@{$conns_ref}) {
+    while ( my $conn = $iterator->() ) {
 
-        print $conn->get_name, "\n";
+        print $conn->get_name(), "\n";
 
     }
 
@@ -32,7 +32,7 @@ DTS::Connection - a Perl class to represent a Microsoft SQL Server 2000 DTS Conn
     # MS SQL Server Connection object
 
     my $conn2 = DTS::Connection->new($connection);
-    print $conn2->to_string, "\n";
+    print $conn2->to_string(), "\n";
 
 =head1 DESCRIPTION
 

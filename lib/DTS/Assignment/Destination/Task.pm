@@ -18,11 +18,13 @@ DTS::Assignment::Destination::Task - a subclass of DTS::Assignment::Destination 
       $app->get_db_package(
         { id => '', version_id => '', name => $config->{package}, package_password => '' } );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+	my $iterator = $package->get_dynamic_props();
 
-        my $iterator = $dyn_props->get_assignments;
+    while ( my $dyn_prop = $iterator->() ) {
 
-        while ( my $assignment = $iterator->() ) {
+        my $assign_iterator = $dyn_props->get_assignments();
+
+        while ( my $assignment = $assign_iterator->() ) {
 
             my $dest = $assignment->get_destination();
 

@@ -17,11 +17,13 @@ DTS::Assignment::Destination::GlobalVar - a subclass of DTS::Assignment::Destina
     my $package = $app->get_db_package(
         { id => '', version_id => '', name => $config->{package}, package_password => '' } );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+	my $iterator = $package->get_dynamic_props();
 
-        my $iterator = $dyn_props->get_assignments;
+    while ( my $dyn_prop = $iterator->() ) {
 
-        while ( my $assignment = $iterator->() ) {
+        my $assign_iterator = $dyn_props->get_assignments();
+
+        while ( my $assignment = $assign_iterator->() ) {
 
             my $dest = $assignment->get_destination();
 

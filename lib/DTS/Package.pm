@@ -52,7 +52,7 @@ __PACKAGE__->mk_ro_accessors(
 Execute all the steps available in the package.
 
 Requires that the C<_sibling> attribute exists and is defined correctly, otherwise method call will abort program 
-execution.
+execution.get_connections
 
 Returns a array reference with C<DTS::Package::Step::Result> objects for error checking.
 
@@ -380,7 +380,8 @@ sub to_string {
 
 =head3 get_connections
 
-Returns an array reference with all connections objects available inside the package.
+Returns an iterator (code reference) that will return a C<DTS::Connection> object at each invocation until there are no
+more objects available.
 
 This method depends on having the C<_sibling> attribute available, therefore is not possible to invoke this method
 after invoking the C<kill_sibling> method.
@@ -389,22 +390,27 @@ after invoking the C<kill_sibling> method.
 
 sub get_connections {
 
-    my $self = shift;
-    my @connections_list;
+    my $self    = shift;
+    my $total   = scalar( in( $self->get_sibling()->Connections ) );
+    my $counter = 0;
 
-    foreach my $connection ( in( $self->get_sibling()->Connections ) ) {
+    return sub {
 
-        push( @connections_list, DTS::Connection->new($connection) );
+        return unless ( $counter < $total );
 
-    }
+        my $conn = ( in( $self->get_sibling()->Connections ) )[$counter];
 
-    return \@connections_list;
+        $counter++;
+
+        return DTS::Connection->new($conn);
+
+      }
 
 }
 
 =head3 count_connections
 
-Return an integer that represents the total amount of connections available in the package object.
+Returns an integer that represents the total amount of connections available in the package object.
 
 Besides the convenience, this method is uses less resources than invoking the respective C<get_> method and 
 looping over the references in the array reference.

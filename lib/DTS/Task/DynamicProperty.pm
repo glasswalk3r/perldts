@@ -21,15 +21,17 @@ DTS::Task::DynamicProperty - a subclass of DTS::Task to represent a DTSDynamicPr
       $app->get_db_package(
         { id => '', version_id => '', name => $config->{package}, package_password => '' } );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+	my $iterator = $package->get_dynamic_props();
 
-        print $dyn_prop->to_string, "\n";    
+    while ( my $dyn_prop = $iterator->() ) {
+
+        print $dyn_prop->to_string(), "\n";    
 
 	}
 
-    my $iterator = $dyn_props->get_assignments;
+    my $assign_iterator = $dyn_props->get_assignments;
 
-    while ( my $assignment = $iterator->() ) {
+    while ( my $assignment = $assign_iterator->() ) {
 
         print $assignment->to_string, "\n";
 

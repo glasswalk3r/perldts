@@ -31,11 +31,13 @@ DTS::Task::ExecutePackage - a subclass of DTS::Task to represent a DTSExecutePac
 
         my $package_name;
 
-        foreach my $execute_pkg ( @{ $package->get_execute_pkgs } ) {
+		my $iterator = $package->get_execute_pkgs();
 
-            $package_name = 'Execute Package task "' . $execute_pkg->get_name . '"';
+        while ( my $execute_pkg = $iterator->() ) {
 
-            is( $execute_pkg->get_package_id,
+            $package_name = 'Execute Package task "' . $execute_pkg->get_name() . '"';
+
+            is( $execute_pkg->get_package_id(),
                 '', "$package_name must have Package ID empty" );
 
             $package_name = '';

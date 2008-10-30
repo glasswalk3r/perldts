@@ -30,7 +30,15 @@ use strict;
 use warnings;
 use Carp qw(cluck confess);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+
+our %type_convertion = (
+
+    DTSDataPumpTask          => 'DataPump',
+    DTSDynamicPropertiesTask => 'DynamicProperty',
+    DTSExecutePackageTask    => 'ExecutePackage',
+    DTSSendMailTask          => 'SendEmail'
+);
 
 =head2 METHODS
 
@@ -68,14 +76,6 @@ sub convert {
 
     confess 'Type is an expected parameter' unless ( defined($type) );
 
-    my %type_convertion = (
-
-        DTSDataPumpTask          => 'DataPump',
-        DTSDynamicPropertiesTask => 'DynamicProperty',
-        DTSExecutePackageTask    => 'ExecutePackage',
-        DTSSendMailTask          => 'SendEmail'
-    );
-
     if ( exists( $type_convertion{$type} ) ) {
 
         return $type_convertion{$type};
@@ -89,6 +89,30 @@ sub convert {
         return undef;
 
     }
+
+}
+
+=head3 get_perl_types
+
+Returns all known task types from Perldts perspective as an array reference.
+
+=cut
+
+sub get_perl_types {
+
+    return [ values(%type_convertion) ];
+
+}
+
+=head3 get_types
+
+Returns all known task types from MS SQL Server DTS API perspective as an array reference.
+
+=cut
+
+sub get_types {
+
+    return [ keys(%type_convertion) ];
 
 }
 

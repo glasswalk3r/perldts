@@ -21,6 +21,10 @@ C<Win32::OLE::Variant> object.
 Some classes in C<DTS> distribution have methods that returns date/time values, but as Variants. C<DTS::DateTime> objects
 are used as substitutes.
 
+Most attributes returned as date/time variants from DTS API original classes are read-only, so beware that changing a
+C<DTS::DateTime> object attribute because, as long as it seems to work,  it will not save the state in the DTS package: the C<DTS::DateTime>
+is "disconnected" from the original date/time variant.
+
 =head2 EXPORT
 
 Nothing.

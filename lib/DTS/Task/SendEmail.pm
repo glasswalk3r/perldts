@@ -26,7 +26,9 @@ DTS::Task::SendEmail - a subclass of DTS::Task that represents a DTSSendMailTask
         }
     );
 
-    foreach my $send_mail ( @{ $package->get_send_emails } ) {
+	my $iterator = $package->get_send_emails();
+
+    while ( my $send_mail = $iterator->() ) {
 
         print $send_mail->to_string, "\n";
 

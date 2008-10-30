@@ -19,15 +19,17 @@ DTS::Assignment::Constant - a class to represent a DynamicPropertiesTaskAssignme
 
     my $package =
       $app->get_db_package(
-        { id => '', version_id => '', name => $config->{package}, package_password => '' } );
+        { id => '', version_id => '', namne => $config->{package}, package_password => '' } );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+	my $iterator = $package->get_dynamic_props();
 
-        foreach my $assignment_prop ( @{ $dyn_prop->get_properties } ) {
+    while ( my $dyn_prop = $iterator->() ) {
 
-            if ( $assignment_prop->get_type eq 'Constant' ) {
+        foreach my $assignment_prop ( @{ $dyn_prop->get_properties() } ) {
 
-			    print $assignment_prop->to_string, "\n";
+            if ( $assignment_prop->get_type() eq 'Constant' ) {
+
+			    print $assignment_prop->to_string(), "\n";
 
             }
 

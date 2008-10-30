@@ -21,7 +21,9 @@ DTS::Assignment::INI - a class to represent a DTS DynamicPropertiesTaskAssignmen
       $app->get_db_package(
         { id => '', version_id => '', name => $config->{package}, package_password => '' } );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+	my $iterator = $package->get_dynamic_props();
+
+    while ( my $dyn_prop = $iterator->() ) {
 
         foreach my $assignment_prop ( @{ $dyn_prop->get_properties } ) {
 

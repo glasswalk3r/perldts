@@ -21,13 +21,15 @@ DTS::Assignment::GlobalVar - a class to represent a DTS DynamicPropertiesTaskAss
                                           name             => $config->{package}, 
                                           package_password => '' } );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+    my $iterator = $package->get_dynamic_props();
 
-        foreach my $assignment_prop ( @{ $dyn_prop->get_properties } ) {
+    while ( my $dyn_prop = $iterator->() ) {
 
-            if ( $assignment_prop->get_type eq 'GlobalVar' ) {
+        foreach my $assignment_prop ( @{ $dyn_prop->get_properties() } ) {
 
-			    print $assignment_prop->to_string, "\n";
+            if ( $assignment_prop->get_type() eq 'GlobalVar' ) {
+
+			    print $assignment_prop->to_string(), "\n";
 
             }
 

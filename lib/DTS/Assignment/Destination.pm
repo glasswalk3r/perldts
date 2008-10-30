@@ -20,13 +20,15 @@ DTS::Assignment::Destination - abstract class to represent a destination string 
 
 	# checking out all destination string from all assignments from 
 	# all Dynamic Property tasks of a package
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+	my $iterator = $package->get_dynamic_props();
 
-		my $iterator = $dyn_props->get_assignments;
+    while ( my $dyn_prop = $iterator->() ) {
 
-		while ( my $assignment = $iterator->() ) {
+		my $assign_iterator = $dyn_props->get_assignments;
 
-			print $assignment->get_string, "\n";
+		while ( my $assignment = $assign_iterator->() ) {
+
+			print $assignment->get_string(), "\n";
 
 		}
 

@@ -9,13 +9,11 @@ my $config   = $xml->XMLin($xml_file);
 my $app = DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
-my $send_emails = $package->get_send_emails();
+my $iterator = $package->get_send_emails();
 
 plan tests => 8 * $package->count_send_emails();
 
-$package->kill_sibling();
-
-foreach my $send ( @{$send_emails} ) {
+while ( my $send = $iterator->() ) {
 
     $send->kill_sibling();
 

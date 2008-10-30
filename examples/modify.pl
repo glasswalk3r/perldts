@@ -10,16 +10,17 @@ my $config   = $xml->XMLin($xml_file);
 my $app = DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
-foreach my $dyn_prop ( @{ $package->get_dynamic_props() } ) {
+my $iterator = $package->get_dynamic_props();
 
-    my $iterator = $dyn_prop->get_assignments();
+while ( my $dyn_prop = $iterator->() ) {
 
-    while ( my $assignment = $iterator->() ) {
+    my $assign_iterator = $dyn_prop->get_assignments();
 
-        print 'old: ', $assignment->get_sibling()->{DestinationPropertyID},
-          "\n";
+    while ( my $assignment = $assign_iterator->() ) {
 
         my $dest = $assignment->get_destination();
+
+        print 'old: ', $destination->get_raw_string(), "\n";
 
         if ( $dest->changes('GlobalVar') ) {
 
@@ -33,7 +34,8 @@ foreach my $dyn_prop ( @{ $package->get_dynamic_props() } ) {
 
         }
 
-        print 'new: ', $assignment->get_sibling()->{DestinationPropertyID},
+        print 'new: ', $destination->get_raw_string(), "\n";
+        print 'new, from original DTS object: ', $assignment->get_sibling()->{DestinationPropertyID},
           "\n";
 
     }

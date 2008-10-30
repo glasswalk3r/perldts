@@ -42,7 +42,7 @@ ok(
 ok( $package->to_string(), 'to_string returns a true value' );
 
 is( ref( $package->get_connections() ),
-    'ARRAY', 'get_connections returns an array reference' );
+    'CODE', 'get_connections returns a code reference' );
 
 ok( $package->count_connections() == 2, 'package has two connections' );
 

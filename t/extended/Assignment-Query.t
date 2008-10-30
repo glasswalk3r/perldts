@@ -13,7 +13,8 @@ my $app = DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
 # test-all DTS package has only one Dynamic Properties Task
-my $dyn_props = @{ $package->get_dynamic_props }[0];
+my $iterator  = $package->get_dynamic_props();
+my $dyn_props = $iterator->();
 
 # these are the values available in the DTS package
 # (hey, I looked thru DTS Designer to get them!)
@@ -22,9 +23,9 @@ my $source =
 "[2].[SELECT TERRITORYID FROM TERRITORIES WHERE TERRITORYDESCRIPTION = 'Boston']";
 my $destination = 'Global Variables;territory_id;Properties;Value';
 
-my $iterator = $dyn_props->get_assignments();
+my $assign_iterator = $dyn_props->get_assignments();
 
-while ( my $assignment = $iterator->() ) {
+while ( my $assignment = $assign_iterator->() ) {
 
     next unless ( $assignment->get_type_name() eq 'Query' );
 
@@ -46,7 +47,7 @@ while ( my $assignment = $iterator->() ) {
         'get_properties returns a hash reference'
     );
 
-    like( $assignment->to_string, qr/[\w\n]+/,
+    like( $assignment->to_string(), qr/[\w\n]+/,
         'to_string returns a string with new line characters' );
 
 }

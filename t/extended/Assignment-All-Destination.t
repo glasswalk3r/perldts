@@ -15,7 +15,8 @@ my $app = DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
 # test-all DTS package has only one Dynamic Properties Task
-my $dyn_props = @{ $package->get_dynamic_props }[0];
+my $iterator  = $package->get_dynamic_props();
+my $dyn_props = $iterator->();
 
 plan tests => $dyn_props->count_assignments() * 2;
 

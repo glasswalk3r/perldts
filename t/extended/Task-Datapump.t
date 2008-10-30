@@ -11,7 +11,8 @@ my $app = DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
 # test-all DTS package has only one Datapump
-my $datapump = @{ $package->get_datapumps }[0];
+my $iterator = $package->get_datapumps();
+my $datapump = $iterator->();
 
 $package->kill_sibling();
 

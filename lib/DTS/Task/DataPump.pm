@@ -26,9 +26,11 @@ DTS::Task::DataPump - a Perl subclass of DTS::Task to represent a DTSDataPumpTas
         }
     );
 
-    foreach my $datapump ( @{ $package->get_datapumps } ) {
+	my $iterator = $package->get_datapumps();
 
-        print $datapump->to_string, "\n";
+    foreach my $datapump ( $iterator->() ) {
+
+        print $datapump->to_string(), "\n";
 
     }
 
@@ -50,7 +52,7 @@ use Carp qw(confess);
 use base qw(DTS::Task Class::Accessor);
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head2 METHODS
 
@@ -97,10 +99,10 @@ sub new {
     $self->{use_identity_inserts} =
       $sibling->Properties->Parent->AllowIdentityInserts;
 
-    $self->{fetch_size}  = $sibling->Properties->Parent->FetchBufferSize;
-    $self->{dest_obj}    = $sibling->Properties->Parent->DestinationObjectName;
-    $self->{dest_sql}  = $sibling->Properties->Parent->DestinationSQLStatement;
-    $self->{first_row} = $sibling->Properties->Parent->FirstRow;
+    $self->{fetch_size} = $sibling->Properties->Parent->FetchBufferSize;
+    $self->{dest_obj}   = $sibling->Properties->Parent->DestinationObjectName;
+    $self->{dest_sql}   = $sibling->Properties->Parent->DestinationSQLStatement;
+    $self->{first_row}  = $sibling->Properties->Parent->FirstRow;
     $self->{progress_count} = $sibling->Properties->Parent->ProgressRowCount;
     $self->{source_conn_id} = $sibling->Properties->Parent->SourceConnectionID;
     $self->{dest_conn_id} =

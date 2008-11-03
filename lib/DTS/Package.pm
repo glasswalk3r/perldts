@@ -496,7 +496,8 @@ sub count_tasks {
 =head3 _get_tasks_by_type
 
 C<_get_tasks_by_type> is a "private method". It will return an iterator (which is a code reference) that will return
-C<DTS::Task> subclasses objects at each call depending on the type passed as a parameter.
+C<DTS::Task> subclasses objects at each call depending on the type passed as a parameter. It will not return and will 
+complete ignore any Task class that is not returned by C<DTS::TaskTypes::get_types()>.
 
 This method creates a cache after first call, so don't expect it will find new tasks after first invocation.
 
@@ -525,10 +526,17 @@ sub _get_tasks_by_type {
 
         foreach my $task ( in( $self->get_sibling()->Tasks ) ) {
 
-            push(
-                @{ $self->{_known_tasks}->{ $task->CustomTaskID } },
-                $counter
-            );
+# :TRICKY:3/11/2008:arfreitas: must avoid completely caching an unimplemeted DTS class in Perldts
+            if ( grep { $task->CustomTaskID eq $_ } @{$list} ) {
+
+                push(
+                    @{ $self->{_known_tasks}->{ $task->CustomTaskID } },
+                    $counter
+                );
+
+            }
+
+# counter must be incremented anyway to get the proper indexes returned by in() function
             $counter++;
 
         }

@@ -1,3 +1,6 @@
+//checks of unchecks all checkbox available in the form
+// this will enable/disable test for the DTS packages listed
+
 var allChecked = false;
 
 function checkAll() {
@@ -22,7 +25,7 @@ function checkAll() {
 
         }
 
-				allChecked = true;
+		allChecked = true;
 
     }
 

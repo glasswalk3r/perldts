@@ -122,10 +122,12 @@ sub fetch_flat_file_conns {
 
     my $package = shift;
 
-    foreach my $conn ( @{ $package->get_connections } ) {
+    my $iterator = $package->get_connections();
+
+    while ( my $conn = $iterator->() ) {
 
         push( @flat_file_conns, $conn )
-          if ( $conn->get_provider eq 'DTSFlatFile' );
+          if ( $conn->get_provider() eq 'DTSFlatFile' );
 
     }
 
@@ -134,10 +136,11 @@ sub fetch_flat_file_conns {
 sub fetch_execute_pkgs {
 
     my $package = shift;
-
     my @tasks_list;
 
-    foreach my $exec_pkg ( @{ $package->get_execute_pkgs } ) {
+	my $iterator = $package->get_execute_pkgs();
+
+    while ( my $exec_pkg = $iterator->() ) {
 
         $exec_pkg->kill_sibling();
         push( @tasks_list, $exec_pkg );
@@ -153,10 +156,12 @@ sub test_execute_pkgs {
     my $package = shift;
     my $package_name;
 
-    foreach my $execute_pkg ( @{ fetch_execute_pkgs($package) } ) {
+    foreach my $execute_pkg ( @{ fetch_execute_pkgs( $package ) } )
+    {
 
-        $package_name = 'Execute Package task "' . $execute_pkg->get_name . '"';
-        is( $execute_pkg->get_package_id,
+        $package_name =
+          'Execute Package task "' . $execute_pkg->get_name() . '"';
+        is( $execute_pkg->get_package_id(),
             '', "$package_name must have Package ID empty" );
 
     }
@@ -168,7 +173,9 @@ sub test_pkg_log_auto_conf {
     my $package       = shift;
     my $log_auto_conf = 0;
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props() } ) {
+    my $dyn_iterator = $package->get_dynamic_props();
+
+    while ( my $dyn_prop = $dyn_iterator->() ) {
 
         my $assign_iterator = $dyn_prop->get_assignments();
 
@@ -205,7 +212,9 @@ sub test_exec_pkg_auto_conf {
 
     undef $exec_pkg_list;
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props() } ) {
+    my $dyn_iterator = $package->get_dynamic_props();
+
+    while ( my $dyn_prop = $dyn_iterator->() ) {
 
         my $assign_iterator = $dyn_prop->get_assignments();
 
@@ -270,7 +279,9 @@ sub test_datapumps {
 
     my $package = shift;
 
-    foreach my $datapump ( @{ $package->get_datapumps() } ) {
+    my $iterator = $package->get_datapumps();
+
+    while ( my $datapump = $iterator->() ) {
 
         $datapump->kill_sibling();
 
@@ -311,7 +322,9 @@ sub test_conn_auto_cfg {
 
     my $conns_ref = fetch_conns( $package->get_connections() );
 
-    foreach my $dyn_prop ( @{ $package->get_dynamic_props } ) {
+    my $dyn_iterator = $package->get_dynamic_props();
+
+    while ( my $dyn_prop = $dyn_iterator->() ) {
 
         my $assign_iterator = $dyn_prop->get_assignments();
 
@@ -404,16 +417,16 @@ sub test_conn_auto_cfg {
 
 sub fetch_conns {
 
-    my $connections_ref = shift;
+    my $iterator = shift;
     my %conns;
 
-    foreach my $conn ( @{$connections_ref} ) {
+    while ( my $conn = $iterator->() ) {
 
-        $conns{ $conn->get_name } = [ $conn->get_provider, 0 ];
+        $conns{ $conn->get_name() } = [ $conn->get_provider(), 0 ];
 
-        if ( $conns{ $conn->get_name }->[0] eq 'SQLOLEBD' ) {
+        if ( $conns{ $conn->get_name() }->[0] eq 'SQLOLEBD' ) {
 
-            $conns{ $conn->get_name }->[2] =
+            $conns{ $conn->get_name() }->[2] =
               { userid => 0, password => 0, datasource => 0, catalog => 0 }
 
         }

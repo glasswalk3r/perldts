@@ -34,7 +34,8 @@ C<DTS_UT::Controller> is a MVC Controller superclass. It should be used by subcl
 YAML file.
 
 C<DTS_UT::Controller> will use an YAML file for configuration. The complete pathname of the YAML should be available in
-the environment variable C<CGIAPP_CONFIG_FILE>.
+the environment variable C<CGIAPP_CONFIG_FILE>. For Apache server, this must be done with a C<SetEnv> directive. For IIS, 
+declaring a global environment variable will do it, just remember to restart IIS after doing that.
 
 =head2 EXPORT
 

@@ -1,25 +1,72 @@
 package DTS_UT::Model::UnitTestExec;
 
+=pod
+
+=head1 NAME
+
+DTS_UT::Model::UnitTestExec - model implementation for MVC architeture
+
+=head1 DESCRIPTION
+
+C<DTS_UT::Model::UnitTestExec> is a model of MVC implementation of L<CGI::Application>. It executes the unit tests
+and returns the values.
+
+=cut
+
 use DTS_UT::Test::Harness::Straps::Parameter;
-use Config::YAML;
 use Params::Validate qw(validate_pos :types);
 use base qw(Class::Accessor);
 
 __PACKAGE__->follow_best_practice;
-__PACKAGE__->mk_ro_accessors(qw(file));
+__PACKAGE__->mk_ro_accessors(qw(test_file));
+
+=head2 EXPORTS
+
+Nothing.
+
+=head2 METHODS
+
+=head3 new
+
+Creates a new C<DTS_UT::Model::UnitTestExec> object.
+
+Expects as a parameter the complete pathname of the test file it will run. Returns a C<DTS_UT::Model::UnitTestExec> 
+object.
+
+=cut
 
 sub new {
 
     validate_pos( @_, { type => SCALAR }, { type => SCALAR } );
 
     my $class = shift;
-    my $self = { file => shift };
+    my $self = { test_file => shift};
 
     bless $self, $class;
 
     return $self;
 
 }
+
+=head3 run_tests
+
+Execute the defined tests for one or more packages.
+
+Expects as parameter an array reference with package(s) name(s) to test.
+
+Returns an array reference with the following structure:
+
+array reference -> [n] -> { 
+
+	package      => package name
+	ok           => tests that are OK
+	max          => total number of tests executed
+    failed       => total number of tests that failed
+	failed_tests => array reference -> [n] = name of the test
+	
+}
+
+=cut
 
 sub run_tests {
 
@@ -88,31 +135,27 @@ sub run_tests {
 
 }
 
-# returns array reference
-sub read_dts_list {
+=head1 SEE ALSO
 
-    my $self = shift;
+=over
 
-    my $yml = Config::YAML->new( config => $self->get_file() );
-    my $list;
+=item *
+L<DTS_UT::Test::Harness::Straps::Parameter>
 
-    eval {
+=back
 
-        $list = $yml->get_packages();
+=head1 AUTHOR
 
-    };
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
 
-    if ($@) {
+=head1 COPYRIGHT AND LICENSE
 
-        die "Could not read configuration file. $@";
+Copyright (C) 2008 by Alceu Rodrigues de Freitas Junior
 
-    }
-    else {
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
 
-        return $list;
-
-    }
-
-}
+=cut
 
 1;

@@ -49,7 +49,7 @@ password
 
 =back
 
-This is exactly the parameters needed by L<DTS::Application> class to connect to a MS SQL Server.
+This is exactly the parameters needed by C<DTS::Application> class to connect to a MS SQL Server.
 
 =cut
 
@@ -80,7 +80,7 @@ sub read_dts_list {
     my $list;
     my $app;
 
-    my $yml_conf = Config::YAML->new( $self->get_file() );
+    my $yml_conf = Config::YAML->new( config => $self->get_file() );
 
     eval {
 

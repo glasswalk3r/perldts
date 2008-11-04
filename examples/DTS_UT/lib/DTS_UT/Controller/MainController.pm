@@ -75,7 +75,7 @@ sub list_packages {
     my $template = $self->load_tmpl( $self->config_param('index_template') );
 
     $model =
-      DTS_UT::Model::DTS->new( $self->config_param('dts_list') );
+      DTS_UT::Model::DTS->new( $self->config_param('ut_config') );
 
     my @values;
     my $counter = 1;
@@ -131,7 +131,7 @@ sub exec_test {
     my $template = $self->load_tmpl( $self->config_param('result_template') );
 
     $model =
-      DTS_UT::Model::UnitTestExec->new( $self->config_param('dts_list') );
+      DTS_UT::Model::UnitTestExec->new( $self->config_param('test_script_path') );
 
     my $query = $self->query();
     my @packages;

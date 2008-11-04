@@ -10,10 +10,11 @@ lib/DTS_UT/View/index.tmpl
 lib/DTS_UT/View/error.tmpl
 lib/DTS_UT/View/test_result.css
 lib/DTS_UT/Model/UnitTestExec.pm
+lib/DTS_UT/Model/DTS.pm
 lib/DTS_UT/Test/Harness/Straps/Parameter.pm
+lib/DTS_UT/Test/Harness/Straps/Eval.pm
 lib/DTS_UT/config/config.yml
 lib/DTS_UT/config/httpd.conf
 lib/CGI/dts.cgi
 lib/DTS_UT/tests/DTS.t
-lib/DTS_UT/tests/dts_list.xml
-lib/DTS_UT/tests/ut_config.xml
+lib/DTS_UT/tests/ut_config.yml

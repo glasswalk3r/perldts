@@ -74,8 +74,7 @@ sub list_packages {
 
     my $template = $self->load_tmpl( $self->config_param('index_template') );
 
-    $model =
-      DTS_UT::Model::DTS->new( $self->config_param('ut_config') );
+    $model = DTS_UT::Model::DTS->new( $self->config_param('ut_config') );
 
     my @values;
     my $counter = 1;
@@ -87,8 +86,11 @@ sub list_packages {
 
     }
 
+   # :WORKAROUND:10/11/2008:ARFREITAS: to be able to use IIS as webserver, using
+   # path_info() method. Additional configuration is necessary in IIS side.
     $template->param(
-        MYSELF        => $self->query()->url( -absolute => 1 ),
+        MYSELF => $self->query()->url( -absolute => 1 ) |
+          $self->query()->path_info(),
         PACKAGES_LIST => \@values
     );
 
@@ -130,8 +132,8 @@ sub exec_test {
 
     my $template = $self->load_tmpl( $self->config_param('result_template') );
 
-    $model =
-      DTS_UT::Model::UnitTestExec->new( $self->config_param('test_script_path') );
+    $model = DTS_UT::Model::UnitTestExec->new(
+        $self->config_param('test_script_path') );
 
     my $query = $self->query();
     my @packages;
@@ -165,9 +167,12 @@ sub exec_test {
         }
         else {
 
+   # :WORKAROUND:10/11/2008:ARFREITAS: to be able to use IIS as webserver, using
+   # path_info() method. Additional configuration is necessary in IIS side.
             $template->param(
                 RESULTS => $results,
-                MYSELF  => $query->url( -absolute => 1 )
+                MYSELF  => $query->url( -absolute => 1 ) |
+                  $self->query()->path_info()
             );
 
             return $template->output();
@@ -206,6 +211,5 @@ it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
-
 
 1;

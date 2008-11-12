@@ -158,8 +158,7 @@ sub exec_test {
 
         eval {
             $results =
-              $model->run_tests( \@packages,
-                $self->config_param('test_script_path') );
+              $model->run_tests( \@packages );
         };
 
         if ($@) {

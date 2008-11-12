@@ -8,7 +8,7 @@ use File::Temp;
 
 use base qw(Class::Accessor);
 
-our $VERSION = qv('0.01');
+our $VERSION = '0.01';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(temp_dir dtsapp flat_file_conns exec_pkgs));
@@ -53,8 +53,7 @@ sub run_test {
 
     $test_builder->output( $temp_file->filename() );
 
-    #   $test_builder->failure_output( \*STDOUT );
-    #	$test_builder->use_numbers(0);
+#    $test_builder->failure_output( \*STDOUT );
 
     plan tests => $package->count_connections() + 6 +
       ( $package->count_execute_pkgs() * 2 ) +
@@ -190,7 +189,7 @@ sub test_execute_pkgs {
     my $package = shift;
     my $package_name;
 
-    foreach my $execute_pkg ( @{ $self->get_exec_pkgs($package) } ) {
+    foreach my $execute_pkg ( @{ $self->get_exec_pkgs() } ) {
 
         $package_name =
           'Execute Package task "' . $execute_pkg->get_name() . '"';
@@ -236,7 +235,7 @@ sub test_exec_pkg_auto_conf {
 
     my %exec_pkg_map;
 
-    foreach my $exec_pkg ( @{ $self->get_exec_pkgs($package) } ) {
+    foreach my $exec_pkg ( @{ $self->get_exec_pkgs() } ) {
 
         $exec_pkg_map{ $exec_pkg->get_name() } =
           { ServerName => 0, ServerPassword => 0, ServerUserName => 0 };

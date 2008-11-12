@@ -133,7 +133,9 @@ sub exec_test {
     my $template = $self->load_tmpl( $self->config_param('result_template') );
 
     $model = DTS_UT::Model::UnitTestExec->new(
-        $self->config_param('test_script_path') );
+        $self->config_param('temp_files_path'),
+        $self->config_param('ut_config')
+    );
 
     my $query = $self->query();
     my @packages;

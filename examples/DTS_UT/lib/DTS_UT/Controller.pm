@@ -20,6 +20,8 @@ our $VERSION = '0.01';
 1;
 __END__
 
+=pod
+
 =head1 NAME
 
 DTS_UT::Controller - Controller superclass for DTS Unit Testing

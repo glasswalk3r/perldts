@@ -15,6 +15,5 @@ lib/DTS_UT/Model/DTS.pm
 lib/DTS_UT/Test/Harness/Straps/NoExec.pm
 lib/DTS_UT/config/config.yml
 lib/DTS_UT/config/httpd.conf
+lib/DTS_UT/config/ut_config.yml
 lib/CGI/dts.cgi
-lib/DTS_UT/tests/DTS.t
-lib/DTS_UT/tests/ut_config.yml

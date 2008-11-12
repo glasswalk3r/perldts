@@ -14,7 +14,6 @@ and returns the values to the controller.
 =cut
 
 use DTS_UT::Test::Harness::Straps::NoExec;
-use DTS::Credential;
 use Params::Validate qw(validate_pos :types);
 use base qw(Class::Accessor);
 use DTS_UT::Model::UnitTest;
@@ -64,13 +63,11 @@ Expects as parameter an array reference with package(s) name(s) to test.
 Returns an array reference with the following structure:
 
 array reference -> [n] -> { 
-
 	package      => package name
 	ok           => tests that are OK
 	max          => total number of tests executed
     failed       => total number of tests that failed
 	failed_tests => array reference -> [n] = name of the test
-	
 }
 
 =cut
@@ -86,22 +83,23 @@ sub run_tests {
 
 # :TODO:12/11/2008:arfreitas: check out if it's not possible to read configuration and processing properties directly.
 # This should avoid cases where user and password is expected.
-    my $credential = DTS::Credential->(
-        {
-            server                 => $yml_conf->get_server(),
-            use_trusted_connection => $yml_conf->get_use_trusted_connection()
-        }
-    );
+    my $strap = DTS_UT::Test::Harness::Straps::NoExec->new(
+        DTS_UT::Model::UnitTest->new(
+            $self->get_temp_dir(),
+            {
+                server => $yml_conf->get_server(),
+                use_trusted_connection =>
+                  $yml_conf->get_use_trusted_connection()
+            }
 
-    my $strap =
-      DTS_UT::Test::Harness::Straps::NoExec->new(
-        DTS_UT::Model::UnitTest->new( $self->get_temp_dir(), $credential ) );
+        )
+    );
 
     my @results;
 
     foreach my $package ( @{$packages} ) {
 
-        my $results = $strap->analyze_file();
+        my $results = $strap->analyze_file($package);
 
         if ( defined( $strap->{error} ) ) {
 

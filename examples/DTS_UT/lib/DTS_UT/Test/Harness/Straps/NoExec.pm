@@ -42,6 +42,41 @@ else {
 
 =head1 METHODS
 
+=head2 new
+
+It expects as a parameter a C<DTS_UT::Model::UnitTest> object. 
+
+Returns a C<DTS_UT::Test::Harness::Straps::NoExec> object.
+
+=cut
+
+sub new {
+
+    my $class = shift;
+    my $test  = shift;
+
+    my $self = $class->SUPER::new(@_);
+
+    $self->{test} = $test;
+
+    return $self;
+
+}
+
+=head2 get_test
+
+Returns the C<DTS_UT::Model::UnitTest> object passed as an argument for C<new> method.
+
+=cut
+
+sub get_test {
+
+    my $self = shift;
+
+    return $self->{test};
+
+}
+
 =head2 analyze_file
 
 Overrides C<analyze_file> method from C<Test::Harness::Straps> class.

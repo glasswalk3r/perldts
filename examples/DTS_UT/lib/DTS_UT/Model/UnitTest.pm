@@ -1,5 +1,36 @@
 package DTS_UT::Model::UnitTest;
 
+=pod
+
+=head1 NAME
+
+DTS_UT::Model::UnitTest - class that represents the test to be executed with DTS packages.
+
+=head2 DESCRIPTION
+
+C<DTS_UT::Model::UnitTest> is the test that will be executed again the desired DTS package(s).
+
+This class is based in C<Test::More> and C<Test::Builder> features. C<Test::Builder> is specially necessary because 
+of the methods C<output> and C<reset> that will change, respectivally, the default output (STDOUT) to a file and will 
+reset the tests and results from previous execution.
+
+The file where the output will be redirected is a temporary file (see L<File::Temp>) that will be removed as soon the 
+test is finished and results read.
+
+Since C<Test::Builder> object is a singleton, at the end of each test it's state must be reseted to start a new test
+without changing it's results.
+
+With such implementation, C<DTS_UT::Model::UnitTest> can be executed N times against DTS packages without exporting 
+lots of subroutines of C<Test::More> into main namespace. By using a temporary file for test output, it can be used 
+with environments like mod_perl once it avoids doing system calls by calling the perl program to execute the test and
+read the output.
+
+=head2 EXPORTS
+
+Nothing.
+
+=cut
+
 use strict;
 use warnings;
 use Test::More;
@@ -12,6 +43,16 @@ our $VERSION = '0.01';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(temp_dir dtsapp flat_file_conns exec_pkgs));
+
+=head2 METHODS
+
+=head3 new
+
+Expects as a parameter an hash reference like defined in L<DTS::Application>.
+
+Returns a C<DTS_UT::Model::UnitTest> object.
+
+=cut
 
 sub new {
 
@@ -26,6 +67,18 @@ sub new {
     return $self;
 
 }
+
+=head3 run_test
+
+Executes the test agains a given DTS package.
+
+Expects as parameter the name of a DTS package.
+
+Returns the complete pathname of the temporary file where the results of the test are written. B<Beware> that if the
+C<DTS_UT::Model::UnitTest> goes out of scope (and it's reclaimed by garbage collector), the temporary file will be 
+removed automatically!
+
+=cut
 
 sub run_test {
 
@@ -53,7 +106,7 @@ sub run_test {
 
     $test_builder->output( $temp_file->filename() );
 
-#    $test_builder->failure_output( \*STDOUT );
+    #    $test_builder->failure_output( \*STDOUT );
 
     plan tests => $package->count_connections() + 6 +
       ( $package->count_execute_pkgs() * 2 ) +
@@ -86,6 +139,41 @@ sub run_test {
     return $temp_file->filename();
 
 }
+
+=head3 "Private" methods
+
+=over
+
+=item *
+test_flat_file_conns
+
+=item *
+fetch_flat_file_conns
+
+=item *
+fetch_execute_pkgs
+
+=item *
+test_execute_pkgs
+
+=item *
+test_pkg_log_auto_conf
+
+=item *
+test_exec_pkg_auto_conf
+
+=item *
+test_datapumps
+
+=item *
+test_conn_auto_cfg
+
+=item *
+fetch_conns
+
+=back
+
+=cut
 
 sub test_flat_file_conns {
 
@@ -469,5 +557,40 @@ sub fetch_conns {
     return \%conns;
 
 }
+
+=head1 SEE ALSO
+
+=over
+
+=item *
+L<DTS_UT::Test::Harness::Straps::Parameter>
+
+=item *
+L<DTS::Application>
+
+=item *
+L<Test::More>
+
+=item *
+L<Test::Builder>
+
+=item *
+L<File::Temp>
+
+=back
+
+=head1 AUTHOR
+
+Alceu Rodrigues de Freitas Junior, E<lt>arfreitas@cpan.orgE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2008 by Alceu Rodrigues de Freitas Junior
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
 
 1;

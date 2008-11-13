@@ -31,8 +31,19 @@ Nothing.
 
 Creates a new C<DTS_UT::Model::UnitTestExec> object.
 
-Expects as a parameter the complete pathname of the test file it will run. Returns a C<DTS_UT::Model::UnitTestExec> 
-object.
+Expects as parameters (in the following order):
+
+=over
+
+=item 1
+complete pathname of the directory that will be used to hold temporary files.
+
+=item 2
+the YAML file used for unit test configuration.
+
+=back
+
+Returns a C<DTS_UT::Model::UnitTestExec> object.
 
 =cut
 

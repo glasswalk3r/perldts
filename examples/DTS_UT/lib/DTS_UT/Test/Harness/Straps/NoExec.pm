@@ -4,7 +4,7 @@ package DTS_UT::Test::Harness::Straps::NoExec;
 
 =head1 NAME
 
-DTS_UT::Test::Harness::Straps::NoExec - subclass of C<Test::Harness::Straps> to eval test file code instead of forking 
+DTS_UT::Test::Harness::Straps::NoExec - subclass of Test::Harness::Straps to eval test file code instead of forking 
 a process to execute it.
 
 =head1 DESCRIPTION
@@ -81,9 +81,8 @@ sub get_test {
 
 Overrides C<analyze_file> method from C<Test::Harness::Straps> class.
 
-Expects two parameters (in this order): the package name that will be tested and 
-the file that will hold the results from the Perl code C<eval>ued. The test script than needs to change it's output to
-a text file instead of C<STDOUT> and C<STDERR>.
+Expects as parameter the package name that will be tested. The test script than needs to change it's default output 
+to a text file instead of C<STDOUT>.
 
 See the methods C<failure_output> and C<output> of L<Test::More::Builder> class.
 
@@ -151,6 +150,9 @@ L<Test::Harness::Straps>
 
 =item *
 L<Test::More::Builder>
+
+=item *
+DTS_UT::Model::UnitTest
 
 =back
 

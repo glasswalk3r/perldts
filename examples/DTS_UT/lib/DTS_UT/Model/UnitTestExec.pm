@@ -73,13 +73,33 @@ Expects as parameter an array reference with package(s) name(s) to test.
 
 Returns an array reference with the following structure:
 
-array reference -> [n] -> { 
-	package      => package name
-	ok           => tests that are OK
-	max          => total number of tests executed
-    failed       => total number of tests that failed
-	failed_tests => array reference -> [n] = name of the test
-}
+=begin text
+
+	array reference -> [n] -> { 
+		package      => package name
+		ok           => tests that are OK
+		max          => total number of tests executed
+		failed       => total number of tests that failed
+		failed_tests => array reference -> [n] = name of the test
+	}
+
+=end text
+
+=begin html
+
+<pre>
+
+	array reference -> [n] -> { 
+		package      => package name
+		ok           => tests that are OK
+		max          => total number of tests executed
+		failed       => total number of tests that failed
+		failed_tests => array reference -> [n] = name of the test
+	}
+
+</pre>
+
+=end html
 
 =cut
 

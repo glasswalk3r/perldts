@@ -1,6 +1,6 @@
 use XML::Simple;
-# there are 4 steps in the sample DTS Package
-use Test::More tests => 4 * 4;
+# there are 5 steps in the sample DTS Package
+use Test::More tests => 5 * 4;
 use DTS::Application;
 
 my $xml_file = 'test-config.xml';

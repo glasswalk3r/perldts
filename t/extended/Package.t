@@ -18,7 +18,7 @@ is_deeply( $package->execute(), fetch_steps_results(),
 );
 
 ok( not( $package->log_to_server() ), 'log to server is disable' );
-ok( $package->auto_commit(), 'auto commit is active' );
+ok( $package->auto_commit(),          'auto commit is active' );
 ok(
     $package->use_explicit_global_vars(),
     'explicit global variables are active'
@@ -48,7 +48,7 @@ ok( $package->count_connections() == 2, 'package has two connections' );
 
 is( ref( $package->get_tasks() ), 'CODE', 'get_tasks returns a iterator' );
 
-ok( $package->count_tasks() == 4, 'package has 4 tasks' );
+is( $package->count_tasks(), 5, 'package has 5 tasks' );
 
 is( ref( $package->get_datapumps() ),
     'CODE', 'get_datapump returns a code reference' );

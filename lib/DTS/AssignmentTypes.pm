@@ -63,6 +63,8 @@ DataFile
 
 The valid types are:
 
+=begin text
+
  Symbol                                             Value  Description
  ---------------------------------------------------------------------------------------------------------------
  DTSDynamicPropertiesSourceType_Constant              4    Source is a constant.
@@ -72,6 +74,47 @@ The valid types are:
                                                            the package.
  DTSDynamicPropertiesSourceType_IniFile               0    Source is the value of a key within an .ini file.
  DTSDynamicPropertiesSourceType_Query                 1    Source is a value returned by an SQL query.
+
+=end text
+
+=begin html
+
+<table border=1>
+<tr>
+<th>Symbol</th><th>Value</th><th>Description</th>
+<tr>
+	<td>DTSDynamicPropertiesSourceType_Constant</td>
+	<td>4</td>
+	<td>Source is a constant</td>
+</tr>
+<tr>
+	<td>DTSDynamicPropertiesSourceType_DataFile</td>
+	<td>5</td>
+	<td>Source is the contents of a data file</td>
+</tr>
+<tr>
+	<td>DTSDynamicPropertiesSourceType_EnvironmentVariable</td>
+	<td>3</td>
+	<td>Source is the value of a system environment variable</td>
+</tr>
+<tr>
+	<td>DTSDynamicPropertiesSourceType_GlobalVariable</td>
+	<td>2</td>
+	<td>Source is the value of a DTS global variable within the package</td>
+</tr>
+<tr>
+	<td>DTSDynamicPropertiesSourceType_IniFile</td>
+	<td>0</td>
+	<td>Source is the value of a key within an .ini file</td>
+</tr>
+<tr>
+<td>DTSDynamicPropertiesSourceType_Query</td>
+<td>1</td>
+<td>Source is a value returned by an SQL query</td>
+</tr>
+</table>
+
+=end html
 
 =cut
 

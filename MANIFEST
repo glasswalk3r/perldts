@@ -73,6 +73,5 @@ test-all.ini
 test-all.txt
 test-conf.dtd
 test-config.xml
-TODO.txt
 t/Destination-Connection.t
 t/Assignment-Destination.t

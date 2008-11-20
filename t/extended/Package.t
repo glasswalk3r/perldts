@@ -1,20 +1,20 @@
 use XML::Simple;
 use Test::More tests => 23;
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 use Win32::OLE qw(in);
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
 my $config   = $xml->XMLin($xml_file);
 
-my $app = DTS::Application->new( $config->{credential} );
+my $app = Win32::SqlServer::DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
 is( ref( $package->get_steps() ),
     'CODE', 'get_steps method returns a code reference' );
 
 is_deeply( $package->execute(), fetch_steps_results(),
-'execute method returns an array reference with DTS::Package::Step::Results objects'
+'execute method returns an array reference with Win32::SqlServer::DTS::Package::Step::Results objects'
 );
 
 ok( not( $package->log_to_server() ), 'log to server is disable' );
@@ -80,7 +80,7 @@ sub fetch_steps_results {
 
     foreach my $step ( in($steps) ) {
 
-        my $new_step = DTS::Package::Step->new($step);
+        my $new_step = Win32::SqlServer::DTS::Package::Step->new($step);
 
         push( @{$collection}, $new_step->get_exec_error_info() );
 

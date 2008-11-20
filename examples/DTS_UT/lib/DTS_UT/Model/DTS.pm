@@ -13,7 +13,7 @@ to the DTS packages available in the MS SQL Server referenced in the web applica
 
 =cut
 
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 use Config::YAML;
 use Params::Validate qw(validate_pos :types);
 use base qw(Class::Accessor);
@@ -49,7 +49,7 @@ password
 
 =back
 
-This is exactly the parameters needed by C<DTS::Application> class to connect to a MS SQL Server.
+This is exactly the parameters needed by C<Win32::SqlServer::DTS::Application> class to connect to a MS SQL Server.
 
 =cut
 
@@ -84,7 +84,7 @@ sub read_dts_list {
 
     eval {
 
-        $app = DTS::Application->new(
+        $app = Win32::SqlServer::DTS::Application->new(
             {
                 server => $yml_conf->get_server(),
                 use_trusted_connection =>
@@ -120,7 +120,7 @@ sub read_dts_list {
 L<Config::YAML>
 
 =item *
-L<DTS::Application>
+L<Win32::SqlServer::DTS::Application>
 
 =back
 

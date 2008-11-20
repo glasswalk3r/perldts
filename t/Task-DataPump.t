@@ -1,8 +1,8 @@
 use Test::More tests => 2;
 
-BEGIN { use_ok('DTS::Task::DataPump') }
+BEGIN { use_ok('Win32::SqlServer::DTS::Task::DataPump') }
 can_ok(
-    'DTS::Task::DataPump',
+    'Win32::SqlServer::DTS::Task::DataPump',
     qw(new
       use_single_file_7
       use_source_row_file

@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 use XML::Simple;
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 use constant XML_FILE   => 'modify.xml';
 use constant BACKUP_DIR => 'c:\\DTS-backup';
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
@@ -15,7 +15,7 @@ my $xml_file = 'modify.xml';
 my $xml      = XML::Simple->new();
 my $config   = $xml->XMLin($xml_file);
 
-my $app       = DTS::Application->new( $config->{credential} );
+my $app       = Win32::SqlServer::DTS::Application->new( $config->{credential} );
 my $pkgs_list = [ $config->{package} ];
 my $counter   = 0;
 

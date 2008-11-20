@@ -1,9 +1,9 @@
 use Test::More tests => 4;
-BEGIN { use_ok('DTS::Application') }
+BEGIN { use_ok('Win32::SqlServer::DTS::Application') }
 
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 
-my $dts_app = DTS::Application->new(
+my $dts_app = Win32::SqlServer::DTS::Application->new(
     {
         server                 => 'somedatabase',
         user                   => 'user',
@@ -12,9 +12,9 @@ my $dts_app = DTS::Application->new(
     }
 );
 
-isa_ok( $dts_app, 'DTS::Application' );
+isa_ok( $dts_app, 'Win32::SqlServer::DTS::Application' );
 can_ok( $dts_app,
     qw(get_db_package get_db_package_regex regex_pkgs_names list_pkgs_names get_credential)
 );
-isa_ok( $dts_app->get_credential, 'DTS::Credential' );
+isa_ok( $dts_app->get_credential, 'Win32::SqlServer::DTS::Credential' );
 

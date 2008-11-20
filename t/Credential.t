@@ -1,11 +1,11 @@
 use Test::More tests => 3;
 
-BEGIN { use_ok('DTS::Credential') }
-can_ok( 'DTS::Credential', qw(new to_list) );
+BEGIN { use_ok('Win32::SqlServer::DTS::Credential') }
+can_ok( 'Win32::SqlServer::DTS::Credential', qw(new to_list) );
 
-require DTS::Credential;
+require Win32::SqlServer::DTS::Credential;
 
-my $credential = DTS::Credential->new(
+my $credential = Win32::SqlServer::DTS::Credential->new(
     {
         server                 => 'somewhere',
         user                   => 'user',

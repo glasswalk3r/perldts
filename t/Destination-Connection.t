@@ -1,10 +1,10 @@
 use Test::More tests => 7;
 use Test::Exception;
 
-BEGIN { use_ok('DTS::Assignment::Destination::Connection') }
+BEGIN { use_ok('Win32::SqlServer::DTS::Assignment::Destination::Connection') }
 
 can_ok(
-    'DTS::Assignment::Destination::Connection',
+    'Win32::SqlServer::DTS::Assignment::Destination::Connection',
     qw(new
       initialize
       get_destination
@@ -14,9 +14,9 @@ can_ok(
       changes)
 );
 
-require DTS::Assignment::Destination::Connection;
+require Win32::SqlServer::DTS::Assignment::Destination::Connection;
 
-my $dest_conn = DTS::Assignment::Destination::Connection->new(
+my $dest_conn = Win32::SqlServer::DTS::Assignment::Destination::Connection->new(
     q{'Connections';'Database connection';'Properties';'Datasource'});
 
 is( $dest_conn->get_destination(),

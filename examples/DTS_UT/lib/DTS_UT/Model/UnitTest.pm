@@ -34,7 +34,7 @@ Nothing.
 use strict;
 use warnings;
 use Test::More;
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 use File::Temp;
 
 use base qw(Class::Accessor);
@@ -48,7 +48,7 @@ __PACKAGE__->mk_ro_accessors(qw(temp_dir dtsapp flat_file_conns exec_pkgs));
 
 =head3 new
 
-Expects as a parameter an hash reference like defined in L<DTS::Application>.
+Expects as a parameter an hash reference like defined in L<Win32::SqlServer::DTS::Application>.
 
 Returns a C<DTS_UT::Model::UnitTest> object.
 
@@ -60,7 +60,7 @@ sub new {
 
     my $self = { temp_dir => shift, credential => shift };
 
-    $self->{dtsapp} = DTS::Application->new( $self->{credential} );
+    $self->{dtsapp} = Win32::SqlServer::DTS::Application->new( $self->{credential} );
 
     bless $self, $class;
 
@@ -566,7 +566,7 @@ sub fetch_conns {
 L<DTS_UT::Test::Harness::Straps::Parameter>
 
 =item *
-L<DTS::Application>
+L<Win32::SqlServer::DTS::Application>
 
 =item *
 L<Test::More>

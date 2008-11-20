@@ -1,17 +1,17 @@
 use XML::Simple;
 use Test::More tests => 4;
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
 my $config   = $xml->XMLin($xml_file);
 my $regex    = '^t.*l$';
 
-my $app = DTS::Application->new( $config->{credential} );
+my $app = Win32::SqlServer::DTS::Application->new( $config->{credential} );
 
 isa_ok( $app->get_db_package( { name => $config->{package} } ),
-    'DTS::Package' );
-isa_ok( $app->get_db_package_regex($regex), 'DTS::Package' );
+    'Win32::SqlServer::DTS::Package' );
+isa_ok( $app->get_db_package_regex($regex), 'Win32::SqlServer::DTS::Package' );
 ok(
     test_list( $app->list_pkgs_names() ),
     'Listing packages names on database server'

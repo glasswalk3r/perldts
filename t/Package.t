@@ -1,8 +1,8 @@
 use Test::More tests => 2;
-BEGIN { use_ok('DTS::Package') }
+BEGIN { use_ok('Win32::SqlServer::DTS::Package') }
 
 can_ok(
-    'DTS::Package',
+    'Win32::SqlServer::DTS::Package',
     qw(log_to_server
       auto_commit
 	  execute

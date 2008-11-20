@@ -1,0 +1,23 @@
+<SOFTPKG NAME="Win32-SqlServer-DTS" VERSION="0,08,0,0">
+    <TITLE>Win32-SqlServer-DTS</TITLE>
+    <ABSTRACT>Perl classes to access Microsoft SQL Server 2000 DTS Packages</ABSTRACT>
+    <AUTHOR>Alceu Rodrigues de Freitas Junior &lt;arfreitas@cpan.org&gt;</AUTHOR>
+    <IMPLEMENTATION>
+        <DEPENDENCY NAME="Class-Accessor" VERSION="0,25,0,0" />
+        <DEPENDENCY NAME="Class-Publisher" VERSION="0,2,0,0" />
+        <DEPENDENCY NAME="DateTime" VERSION="0,35,0,0" />
+        <DEPENDENCY NAME="Devel-CheckOS" VERSION="0,0,0,0" />
+        <OS NAME="MSWin32" />
+        <ARCHITECTURE NAME="MSWin32-x86-multi-thread-5.8" />
+        <CODEBASE HREF="perldts-0.08.tar.gz" />
+    </IMPLEMENTATION>
+    <IMPLEMENTATION>
+        <DEPENDENCY NAME="Class-Accessor" VERSION="0,25,0,0" />
+        <DEPENDENCY NAME="Class-Publisher" VERSION="0,2,0,0" />
+        <DEPENDENCY NAME="DateTime" VERSION="0,35,0,0" />
+        <DEPENDENCY NAME="Devel-CheckOS" VERSION="0,0,0,0" />
+        <OS NAME="MSWin32" />
+        <ARCHITECTURE NAME="MSWin32-x86-multi-thread-5.10" />
+        <CODEBASE HREF="perldts-0.08.tar.gz" />
+    </IMPLEMENTATION>
+</SOFTPKG>

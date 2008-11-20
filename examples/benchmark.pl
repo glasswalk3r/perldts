@@ -1,6 +1,6 @@
 use warnings;
 use strict;
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 use Test::More;
 use XML::Simple;
 use Benchmark qw(cmpthese);
@@ -10,7 +10,7 @@ my $xml      = XML::Simple->new();
 my $config   = $xml->XMLin($xml);
 my $pkg_name = $config->{package};
 
-my $unique_app       = DTS::Application->new( $config->{credential} );
+my $unique_app       = Win32::SqlServer::DTS::Application->new( $config->{credential} );
 my $total_executions = 20;
 
 plan tests => ( 6 * $total_executions ) * 2;
@@ -46,7 +46,7 @@ sub unique_app {
 
 sub several_apps {
 
-    my $app = DTS::Application->new( $xml->XMLin(XML_FILE) );
+    my $app = Win32::SqlServer::DTS::Application->new( $xml->XMLin(XML_FILE) );
 
     my $package = $app->get_db_package(
         {

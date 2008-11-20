@@ -3,13 +3,13 @@ use strict;
 
 use Test::More tests => 5;
 use XML::Simple;
-use DTS::Application;
+use Win32::SqlServer::DTS::Application;
 
 my $xml_file = 'test-config.xml';
 my $xml      = XML::Simple->new();
 my $config   = $xml->XMLin($xml_file);
 
-my $app = DTS::Application->new( $config->{credential} );
+my $app = Win32::SqlServer::DTS::Application->new( $config->{credential} );
 my $package = $app->get_db_package( { name => $config->{package} } );
 
 # test-all DTS package has only one Dynamic Properties Task
@@ -23,7 +23,7 @@ while ( my $assignment = $assign_iterator->() ) {
     next unless ( $assignment->get_type_name() eq 'DataFile' );
 
     # test the new method new
-    isa_ok( $assignment, 'DTS::Assignment::DataFile' );
+    isa_ok( $assignment, 'Win32::SqlServer::DTS::Assignment::DataFile' );
 
     is( $assignment->get_type, 5, 'get_type returns 5' );
 
@@ -38,7 +38,7 @@ while ( my $assignment = $assign_iterator->() ) {
         {
             type        => 5,
             source      => 'E:\dts\perl_dts\DTS\test-all.txt',
-            destination => DTS::Assignment::Destination::Connection->new(
+            destination => Win32::SqlServer::DTS::Assignment::Destination::Connection->new(
                 q{'Connections';'Text File (Source)';'Properties';'DataSource'}
             )
         },

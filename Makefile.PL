@@ -2,8 +2,8 @@ use 5.008008;
 use ExtUtils::MakeMaker qw(WriteMakefile prompt);
 
 my %config = (
-    NAME         => 'DTS',
-    VERSION_FROM => 'lib/DTS.pm',    # finds $VERSION
+    NAME         => 'Win32::SqlServer::DTS',
+    VERSION_FROM => 'lib/Win32/SqlServer/DTS.pm',    # finds $VERSION
     PREREQ_PM    => {
         'Class::Accessor'  => 0.25,
         'Hash::Util'       => 0.05,
@@ -32,7 +32,7 @@ my %config = (
         $] >= 5.005
         ?    ## Add these new keywords supported since 5.005
           (
-            ABSTRACT_FROM => 'lib/DTS.pm',    # retrieve abstract from module
+            ABSTRACT_FROM => 'lib/Win32/SqlServer/DTS.pm',    # retrieve abstract from module
             AUTHOR => 'Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>'
           )
         : ()

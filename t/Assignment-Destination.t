@@ -1,9 +1,9 @@
 use Test::More tests => 2;
 
-BEGIN { use_ok('DTS::Assignment::Destination') }
+BEGIN { use_ok('Win32::SqlServer::DTS::Assignment::Destination') }
 
 can_ok(
-    'DTS::Assignment::Destination',
+    'Win32::SqlServer::DTS::Assignment::Destination',
     qw(new
       initialize
       get_destination

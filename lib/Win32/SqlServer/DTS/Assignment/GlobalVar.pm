@@ -53,6 +53,7 @@ None by default.
 
 use 5.008008;
 use strict;
+use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment);
 use Hash::Util qw(lock_keys);
 

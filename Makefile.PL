@@ -11,7 +11,8 @@ my %config = (
         'Carp'             => 1.04,
         'DateTime'         => 0.35,
         'Class::Publisher' => 0.2,
-        'Devel::AssertOS'  => 0
+        'Devel::AssertOS'  => 0, 
+		'XML::Simple'      => 2.18;
     },
     META_MERGE => {
         resources => {

@@ -40,6 +40,9 @@ MANIFEST			This list of files
 META.yml
 CHANGELOG
 region.txt
+README
+t/pod.t
+t/pod-coverage.t
 t/Application.t
 t/Assignment-Constant.t
 t/Assignment-DataFile.t

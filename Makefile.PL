@@ -11,8 +11,8 @@ my %config = (
         'Carp'             => 1.04,
         'DateTime'         => 0.35,
         'Class::Publisher' => 0.2,
-        'Devel::AssertOS'  => 0, 
-		'XML::Simple'      => 2.18;
+        'Devel::AssertOS'  => 0,
+        'XML::Simple'      => 2.18
     },
     META_MERGE => {
         resources => {
@@ -33,7 +33,8 @@ my %config = (
         $] >= 5.005
         ?    ## Add these new keywords supported since 5.005
           (
-            ABSTRACT_FROM => 'lib/Win32/SqlServer/DTS.pm',    # retrieve abstract from module
+            ABSTRACT_FROM =>
+              'lib/Win32/SqlServer/DTS.pm',    # retrieve abstract from module
             AUTHOR => 'Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>'
           )
         : ()

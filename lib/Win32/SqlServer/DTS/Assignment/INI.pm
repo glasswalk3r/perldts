@@ -60,9 +60,15 @@ use Hash::Util qw(lock_keys);
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(filename section key));
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 METHODS
+
+Inherits all methods from C<Win32::SqlServer::DTS::Assignment>.
+
+=head3 new
+
+Extends superclass method C<new> by modifying the C<source> attribute.
 
 =cut
 

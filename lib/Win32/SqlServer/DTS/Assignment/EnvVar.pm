@@ -57,9 +57,15 @@ use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment);
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head2 METHODS
+
+Inherits all methods from C<Win32::SqlServer::DTS::Assignment>.
+
+=head3 new
+
+Extends superclass method C<new> by modifying the C<source> attribute.
 
 =cut
 

@@ -52,7 +52,7 @@ use Carp;
 use base qw(Win32::SqlServer::DTS::Task Class::Accessor);
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 METHODS
 
@@ -76,6 +76,52 @@ our %attrib_convertion = (
     subject          => 'Subject',
     to_line          => 'ToLine'
 );
+
+=head3 new
+
+Overrides the superclass C<Win32::SqlServer::DTS::Task> method C<new> to define the following attributes:
+
+=over
+
+=item *
+
+cc_line
+
+=item *
+
+attachments
+
+=item *
+
+message_text
+
+=item *
+
+profile_password
+
+=item *
+
+profile
+
+=item *
+
+save_sent
+
+=item *
+
+is_nt_service
+
+=item *
+
+subject
+
+=item *
+
+to_line
+
+=back
+
+=cut
 
 sub new {
 
@@ -122,6 +168,13 @@ sub save_sent {
     return $self->{save_sent};
 
 }
+
+=head3 to_string
+
+Overrides superclass C<Win32::SqlServer::DTS::Task> method C<to_string> to return strings for all defined attributes
+of the object.
+
+=cut
 
 sub to_string {
 

@@ -63,6 +63,10 @@ our $VERSION = '0.02';
 
 Inherits all methods from C<Win32::SqlServer::DTS::Assignment>.
 
+=head3 new
+
+Overrides C<new> method from superclass by modifying the attribute C<source>.
+
 =cut
 
 sub new {

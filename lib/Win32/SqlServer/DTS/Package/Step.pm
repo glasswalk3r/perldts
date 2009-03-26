@@ -50,7 +50,7 @@ __PACKAGE__->mk_accessors(
 __PACKAGE__->mk_ro_accessors(
     qw(exec_status_code start_time exec_time finish_time exec_result));
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 our %attrib_convertion = (
     start_time         => 'StartTime',
@@ -274,7 +274,13 @@ sub _error_message {
 
 }
 
-# overriding Class::Accessor method to check for _sibling attribute
+=head3 set
+
+Overriding Class::Accessor method to check for _sibling attribute. This is used internally by the module and
+should not be used unless the behaviour of the class must be changed.
+
+=cut
+
 sub set {
 
     my $self  = shift;

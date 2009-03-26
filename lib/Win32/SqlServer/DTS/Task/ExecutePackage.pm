@@ -64,7 +64,7 @@ use Carp;
 use base qw(Win32::SqlServer::DTS::Task Class::Accessor);
 use Hash::Util qw(lock_keys);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head2 METHODS
 
@@ -77,6 +77,60 @@ __PACKAGE__->mk_ro_accessors(
     qw(package_id package_name package_password repository_database_name server_name
       server_password server_username file_name)
 );
+
+=head3 new
+
+Overrides the superclass C<Win32::SqlServer::DTS::Task> C<new> method by defining the following attributes:
+
+=over
+
+=item *
+
+package_id
+
+=item *
+
+package_name
+
+=item *
+
+package_password
+
+=item *
+
+repository_database_name
+
+=item *
+
+server_name
+
+=item *
+
+server_password
+
+=item *
+
+server_username
+
+=item *
+
+use_repository
+
+=item *
+
+use_trusted_connection
+
+=item *
+
+file_name
+
+=item *
+
+input_global_variable_names
+
+=back
+
+=cut
 
 sub new {
 
@@ -183,6 +237,13 @@ sub use_trusted {
     return $self->{use_trusted_connection};
 
 }
+
+=head3 to_string
+
+Overrides superclass C<Win32::SqlServer::DTS::Task> method C<to_string> to return strings for all defined attributes
+of the object.
+
+=cut
 
 sub to_string {
 

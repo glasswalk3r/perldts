@@ -1,7 +1,5 @@
 package DTS_UT;
 
-use 5.008008;
-
 our $VERSION = '0.01';
 
 1;

@@ -55,13 +55,10 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment::Destination);
 use Carp qw(confess);
-
-our $VERSION = '0.01';
 
 =head2 METHODS
 

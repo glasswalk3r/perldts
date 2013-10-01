@@ -25,15 +25,12 @@ None by default.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS);
 use Carp qw(confess);
 use Win32::SqlServer::DTS::AssignmentTypes;
 use Win32::SqlServer::DTS::Assignment::DestinationFactory;
-
-our $VERSION = '0.03';
 
 =head2 METHODS
 

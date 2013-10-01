@@ -31,13 +31,10 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(DateTime);
 use Params::Validate qw(validate_pos);
-
-our $VERSION = '0.01';
 
 =head2 METHODS
 

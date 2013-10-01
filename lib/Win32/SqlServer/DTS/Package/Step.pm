@@ -32,7 +32,6 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS Class::Accessor);
@@ -49,8 +48,6 @@ __PACKAGE__->mk_accessors(
 
 __PACKAGE__->mk_ro_accessors(
     qw(exec_status_code start_time exec_time finish_time exec_result));
-
-our $VERSION = '0.02';
 
 our %attrib_convertion = (
     start_time         => 'StartTime',

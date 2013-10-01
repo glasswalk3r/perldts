@@ -24,7 +24,6 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use Carp qw(confess);
@@ -37,8 +36,6 @@ use Win32::SqlServer::DTS::Package::Step;
 use Hash::Util qw(lock_keys);
 use File::Spec;
 use Win32::SqlServer::DTS::TaskTypes;
-
-our $VERSION = '0.04';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(

@@ -24,12 +24,9 @@ None by default.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use Carp qw(confess);
-
-our $VERSION = '0.01';
 
 =head2 METHODS
 

@@ -25,12 +25,9 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use Carp qw(cluck confess);
-
-our $VERSION = '0.03';
 
 our %type_convertion = (
 

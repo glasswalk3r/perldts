@@ -51,7 +51,6 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment Class::Accessor);
@@ -59,8 +58,6 @@ use Hash::Util qw(lock_keys);
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(filename section key));
-
-our $VERSION = '0.03';
 
 =head2 METHODS
 

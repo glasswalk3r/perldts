@@ -57,14 +57,11 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Class::Accessor Class::Publisher);
 use Carp qw(confess);
 use Hash::Util qw(lock_keys);
-
-our $VERSION = '0.02';
 
 =head2 METHODS
 

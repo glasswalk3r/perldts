@@ -49,14 +49,10 @@ returned by the C<get_properties> method from C<Win32::SqlServer::DTS::Task::Dyn
 Nothing.
 
 =cut
-
-use 5.008008;
 use strict;
 use warnings;
 
 use base qw(Win32::SqlServer::DTS::Assignment);
-
-our $VERSION = '0.03';
 
 =head2 METHODS
 

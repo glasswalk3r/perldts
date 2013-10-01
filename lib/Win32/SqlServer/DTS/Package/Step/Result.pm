@@ -18,7 +18,6 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Class::Accessor);
@@ -30,8 +29,6 @@ use Hash::Util qw(lock_keys);
 __PACKAGE__->follow_best_practice();
 __PACKAGE__->mk_ro_accessors(
     qw(exec_status step_name error_code source description));
-
-our $VERSION = '0.01';
 
 =head2 METHODS
 

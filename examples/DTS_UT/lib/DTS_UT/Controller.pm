@@ -1,6 +1,5 @@
 package DTS_UT::Controller;
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(CGI::Application);
@@ -14,8 +13,6 @@ sub cgiapp_init {
     $self->config_file();
 
 }
-
-our $VERSION = '0.01';
 
 1;
 __END__

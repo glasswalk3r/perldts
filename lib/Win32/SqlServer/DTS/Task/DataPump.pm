@@ -45,14 +45,11 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use Carp qw(confess);
 use base qw(Win32::SqlServer::DTS::Task Class::Accessor);
 use Hash::Util qw(lock_keys);
-
-our $VERSION = '0.04';
 
 =head2 METHODS
 

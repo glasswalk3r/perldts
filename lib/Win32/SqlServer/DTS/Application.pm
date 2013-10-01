@@ -40,7 +40,6 @@ None by default.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use Carp qw(confess cluck);
@@ -49,8 +48,6 @@ use Win32::OLE qw(in);
 use Win32::SqlServer::DTS::Package;
 use Win32::SqlServer::DTS::Credential;
 use Hash::Util qw(lock_keys);
-
-our $VERSION = '0.03';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(credential));

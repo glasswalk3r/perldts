@@ -12,7 +12,8 @@ my %config = (
         'DateTime'         => 0.35,
         'Class::Publisher' => 0.2,
         'Devel::AssertOS'  => 0,
-        'XML::Simple'      => 2.18
+        'XML::Simple'      => 2.18, 
+		'Params::Validate' => 0
     },
     META_MERGE => {
         resources => {
@@ -23,11 +24,6 @@ my %config = (
         },
     },
     LICENSE => 'GNU General Public License (GPL)',
-
-    # :WORKAROUND:14/10/2008:arfreitas: ExtUtils::MakeMaker version available
-    # for ActivePerl does not support META_MERGE tags. Until an upgrade
-    # is available, I'll disable META.yml generation, writing it by hand
-    NO_META => 1,
     dist    => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
     (
         $] >= 5.005

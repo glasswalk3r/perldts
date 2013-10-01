@@ -48,7 +48,6 @@ Nothing.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS::Task);
@@ -56,8 +55,6 @@ use Carp;
 use Win32::OLE qw(in);
 use Win32::SqlServer::DTS::AssignmentFactory;
 use Hash::Util qw(lock_keys);
-
-our $VERSION = '0.02';
 
 =head2 METHODS
 

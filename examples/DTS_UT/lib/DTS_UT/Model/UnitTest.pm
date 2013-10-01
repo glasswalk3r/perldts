@@ -39,8 +39,6 @@ use File::Temp;
 
 use base qw(Class::Accessor);
 
-our $VERSION = '0.01';
-
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(temp_dir dtsapp flat_file_conns exec_pkgs));
 

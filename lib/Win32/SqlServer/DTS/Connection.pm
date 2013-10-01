@@ -49,15 +49,12 @@ None by default.
 
 =cut
 
-use 5.008008;
 use strict;
 use warnings;
 use Carp;
 use base qw(Class::Accessor Win32::SqlServer::DTS);
 use Win32::OLE qw(in);
 use Hash::Util qw(lock_keys);
-
-our $VERSION = '0.02';
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(

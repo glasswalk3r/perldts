@@ -2,7 +2,7 @@ package Win32::SqlServer::DTS;
 
 =head1 NAME
 
-Win32::SqlServer::DTS - Perl classes to access Microsoft SQL Server 2000 DTS Packages 
+Win32::SqlServer::DTS - Perl classes to access Microsoft SQL Server 2000 DTS Packages
 
 =head1 DESCRIPTION
 
@@ -47,7 +47,7 @@ use Data::Dumper;
 use Carp qw(confess);
 use Devel::AssertOS qw(MSWin32);
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head2 METHODS
 

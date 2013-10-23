@@ -12,8 +12,8 @@ my %config = (
         'DateTime'         => 0.35,
         'Class::Publisher' => 0.2,
         'Devel::AssertOS'  => 0,
-        'XML::Simple'      => 2.18, 
-		'Params::Validate' => 0
+        'XML::Simple'      => 2.18,
+        'Params::Validate' => 0
     },
     META_MERGE => {
         resources => {
@@ -23,14 +23,14 @@ my %config = (
             repository => 'http://code.google.com/p/perldts/source/browse/'
         },
     },
-    LICENSE => 'GNU General Public License (GPL)',
-    dist    => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
+    ( $ExtUtils::MakeMaker::VERSION >= 6.3002 ? ( 'LICENSE' => 'gpl', ) : () ),
+	NO_MYMETA => 1,
+    dist => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
     (
         $] >= 5.005
         ?    ## Add these new keywords supported since 5.005
           (
-            ABSTRACT_FROM =>
-              'lib/Win32/SqlServer/DTS.pm',    # retrieve abstract from module
+            ABSTRACT_FROM => 'lib/Win32/SqlServer/DTS.pm',
             AUTHOR => 'Alceu Rodrigues de Freitas Junior <arfreitas@cpan.org>'
           )
         : ()

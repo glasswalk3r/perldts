@@ -1,13 +1,13 @@
 # Win32-SqlServer-DTS
 
-Although it's possible to use all features here by using only Win32::OLE module, Win32-SqlServer-DTS (being more specific, it's childs classes) provides a much easier interface (pure Perl) and (hopefully) a better documentation. 
+Although it's possible to use all features here by using only [Win32::OLE](https://github.com/jandubois/win32-ole) module, Win32-SqlServer-DTS (being more specific, it's childs classes) provides a much easier interface (pure Perl) and (hopefully) a better documentation. 
 Since it's build over Win32::OLE module, Win32-SqlServer-DTS will only work with ActivePerl distribution running in a Microsoft Windows operational system.
 
 The API for this class will give only read access to a package attributes. No write methods are available are directly available at this time, but could be executed since at each Win32-SqlServer-DTS object created a related object is passed as an reference to new object. This related object is a MS SQL Server Win32-SqlServer-DTS object and has all methods and properties as defined by the MS API. This object reference is kept as an "private" property called sibling and generally can be obtained with a get_sibling method call. Once the reference is recovered, all methods from it are available.
 
 ## Why having all this trouble?
 
-You may be asking yourself why having all this trouble to write such API as an layer to access data thought [Win32::OLE])https://github.com/jandubois/win32-ole) module.
+You may be asking yourself why having all this trouble to write such API as an layer to access data thought [Win32::OLE](https://github.com/jandubois/win32-ole) module.
 
 The very simple reason is: MS SQL Server 2000 API is terrible to work with (lots and lots of indirection), the documentation is not as good as it should be and one has to convert examples from it of VBScript code to Perl. 
 Win32-SqlServer-DTS API was created to provide an easier (and more "perlish") way to fetch data from a MS SQL Server DTS package. One can use this API to easily create reports or implement automatic tests using a module as [Test::More](http://github.com/Test-More/test-more/) (see EXAMPLES directory in the tarball distribution of this module).

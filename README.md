@@ -52,13 +52,6 @@ After installing, you can find documentation for this module with the perldoc co
 ```
 perldoc Win32::SqlServer::DTS
 ```
-    
-You can also look for information at:
-
-* Bug tracker: http://code.google.com/p/perldts/issues/list
-* CPAN Ratings: http://cpanratings.perl.org/dist/Win32-SqlServer-DTS
-* Search CPAN: http://search.cpan.org/dist/Win32-SqlServer-DTS/
-
 ## Copyright and licence
 
 Copyright (C) 2006 by Alceu Rodrigues de Freitas Junior

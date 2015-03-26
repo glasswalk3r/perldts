@@ -47,7 +47,7 @@ use Data::Dumper;
 use Carp qw(confess);
 use Devel::AssertOS qw(MSWin32);
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 =head2 METHODS
 
@@ -179,7 +179,7 @@ If you need to persist any object created, first remove the I<sibling> object us
 method. As said before, it was detected issues with the L<Data::Dumper|Data::Dumper> C<Dumper> function, but there
 are no garantees that invoking C<kill_sibling> will solve the issue, since this probably also depends on Perl 
 garbage collector. Anyway, persisting a DTS object will do no good if you need to execute methods that depends on the
-I<sibling> attribute since those methods are based remote requests.
+I<sibling> attribute since those methods are based on remote requests with COM.
 
 C<kill_sibling> probably will help also regarding memory using, althought this was not tested formally.
 

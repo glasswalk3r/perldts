@@ -18,14 +18,13 @@ my %config = (
     META_MERGE => {
         resources => {
             license  => 'http://www.gnu.org/licenses/old-licenses/gpl-2.0.html',
-            homepage => 'http://code.google.com/p/perldts/',
-            bugtracker => 'http://code.google.com/p/perldts/issues/list',
-            repository => 'http://code.google.com/p/perldts/source/browse/'
+            homepage => 'https://github.com/glasswalk3r/perldts',
+            bugtracker => 'https://github.com/glasswalk3r/perldts/issues',
+            repository => 'https://github.com/glasswalk3r/perldts'
         },
     },
     ( $ExtUtils::MakeMaker::VERSION >= 6.3002 ? ( 'LICENSE' => 'gpl', ) : () ),
-	NO_MYMETA => 1,
-    dist => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
+    dist      => { SUFFIX => '.gz', COMPRESS => 'gzip --best' },
     (
         $] >= 5.005
         ?    ## Add these new keywords supported since 5.005

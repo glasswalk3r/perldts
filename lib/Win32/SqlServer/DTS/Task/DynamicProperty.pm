@@ -55,6 +55,7 @@ use Carp;
 use Win32::OLE qw(in);
 use Win32::SqlServer::DTS::AssignmentFactory;
 use Hash::Util qw(lock_keys);
+# VERSION
 
 =head2 METHODS
 

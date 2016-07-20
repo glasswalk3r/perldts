@@ -39,6 +39,7 @@ use Carp qw(confess);
 use Win32::OLE::Variant;
 use Win32::SqlServer::DTS::Package::Step::Result;
 use Win32::SqlServer::DTS::DateTime;
+# VERSION
 
 __PACKAGE__->follow_best_practice();
 

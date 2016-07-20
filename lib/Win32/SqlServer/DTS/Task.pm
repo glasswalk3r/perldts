@@ -30,6 +30,7 @@ use warnings;
 use Carp qw(confess);
 use base qw(Win32::SqlServer::DTS);
 use Win32::SqlServer::DTS::TaskTypes;
+# VERSION
 
 =head2 METHODS
 
@@ -44,33 +45,23 @@ information about how to fetch C<Win32::SqlServer::DTS::Task> objects easialy.
 =cut
 
 sub new {
-
     my $class = shift;
     my $task  = shift;
-
     my $self = { _sibling => $task->CustomTask };
-
     bless $self, $class;
-
     my $sibling = $self->get_sibling;
-
     $self->{name}        = $sibling->Name;
     $self->{description} = $sibling->Description;
-
     my $type = Win32::SqlServer::DTS::TaskTypes::convert( $task->CustomTaskID );
 
     if ( defined($type) ) {
-
         $self->{type} = $type;
         return $self;
-
     }
     else {
-
         confess 'Type '
           . $sibling->CustomTaskID
           . ' is not a implemented Win32::SqlServer::DTS::Task subclasses';
-
     }
 
 }
@@ -82,10 +73,8 @@ Returns a string with the name of the task.
 =cut
 
 sub get_name {
-
     my $self = shift;
     return $self->{name};
-
 }
 
 =head3 get_description
@@ -95,10 +84,8 @@ Returns a string with the description of the task.
 =cut
 
 sub get_description {
-
     my $self = shift;
     return $self->{description};
-
 }
 
 =head3 get_type
@@ -108,10 +95,8 @@ Returns a string of type of the task.
 =cut
 
 sub get_type {
-
     my $self = shift;
     return $self->{type};
-
 }
 
 =head3 get_properties
@@ -130,9 +115,7 @@ and return a string with all properties in a nicely manner for printing.
 =cut
 
 sub to_string {
-
     confess "print_properties must be defined in a specialized Win32::SqlServer::DTS::Task class\n";
-
 }
 
 1;

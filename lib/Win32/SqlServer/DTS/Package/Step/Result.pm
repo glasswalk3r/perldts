@@ -22,9 +22,10 @@ use strict;
 use warnings;
 use base qw(Class::Accessor);
 use Carp qw(confess);
-use XML::Simple;
-use Params::Validate qw(validate :types);
+use XML::Simple 2.18;
+use Params::Validate 1.24 qw(validate :types);
 use Hash::Util qw(lock_keys);
+# VERSION
 
 __PACKAGE__->follow_best_practice();
 __PACKAGE__->mk_ro_accessors(

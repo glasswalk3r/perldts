@@ -44,6 +44,7 @@ use strict;
 use warnings;
 use Carp;
 use Win32::SqlServer::DTS::AssignmentTypes;
+# VERSION
 
 =head2 METHODS
 

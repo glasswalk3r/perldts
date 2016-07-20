@@ -45,9 +45,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 use Carp qw(confess);
-use Devel::AssertOS qw(MSWin32);
-
-our $VERSION = '0.12';
+# VERSION
 
 =head2 METHODS
 
@@ -85,20 +83,15 @@ Validates if the attribute _sibling is defined and has a valid value. Returns tr
 =cut
 
 sub is_sibling_ok {
-
     my $self = shift;
 
     if (    ( exists( $self->{_sibling} ) )
         and ( $self->{_sibling}->isa('Win32::OLE') ) )
     {
-
         return 1;
-
     }
     else {
-
         return 0;
-
     }
 
 }
@@ -114,10 +107,8 @@ The reasons of why doing such thing is described in L<CAVEATS|/CAVEATS>.
 =cut
 
 sub kill_sibling {
-
     my $self = shift;
     delete $self->{_sibling};
-
 }
 
 =head3 debug

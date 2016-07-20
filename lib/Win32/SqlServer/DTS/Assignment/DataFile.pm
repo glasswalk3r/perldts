@@ -51,8 +51,8 @@ Nothing.
 =cut
 use strict;
 use warnings;
-
 use base qw(Win32::SqlServer::DTS::Assignment);
+# VERSION
 
 =head2 METHODS
 

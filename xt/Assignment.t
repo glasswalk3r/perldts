@@ -3,7 +3,6 @@ use Test::More;
 use Test::Exception;
 use Win32::SqlServer::DTS::Application;
 use Win32::SqlServer::DTS::Assignment;
-
 use Win32::OLE qw(in);
 
 my $xml_file = 'test-config.xml';

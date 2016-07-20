@@ -29,6 +29,7 @@ Nothing.
 use strict;
 use warnings;
 use Carp qw(cluck confess);
+# VERSION
 
 =head2 METHODS
 

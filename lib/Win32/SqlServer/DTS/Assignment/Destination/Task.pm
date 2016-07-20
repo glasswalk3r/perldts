@@ -59,6 +59,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use base qw(Win32::SqlServer::DTS::Assignment::Destination);
+# VERSION
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(taskname));

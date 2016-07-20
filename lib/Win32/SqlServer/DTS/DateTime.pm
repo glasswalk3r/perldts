@@ -34,7 +34,8 @@ Nothing.
 use strict;
 use warnings;
 use base qw(DateTime);
-use Params::Validate qw(validate_pos);
+use Params::Validate 1.24 qw(validate_pos);
+# VERSION
 
 =head2 METHODS
 
@@ -45,15 +46,10 @@ Expects a C<Win32::OLE::Variant> date object as a parameter.
 =cut
 
 sub new {
-
     my $class = shift;
-
     validate_pos( @_, { isa => 'Win32::OLE::Variant' } );
-
     my $variant_timestamp = shift;
-
     my $self = $class->SUPER::new(
-
         year   => $variant_timestamp->Date('yyyy'),
         month  => $variant_timestamp->Date('M'),
         day    => $variant_timestamp->Date('d'),
@@ -61,9 +57,7 @@ sub new {
         minute => $variant_timestamp->Time('m'),
         second => $variant_timestamp->Time('s'),
     );
-
     return $self;
-
 }
 
 1;

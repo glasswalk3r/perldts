@@ -44,10 +44,11 @@ use strict;
 use warnings;
 use Carp qw(confess cluck);
 use base qw(Class::Accessor Win32::SqlServer::DTS);
-use Win32::OLE qw(in);
+use Win32::OLE 0.1704 qw(in);
 use Win32::SqlServer::DTS::Package;
 use Win32::SqlServer::DTS::Credential;
 use Hash::Util qw(lock_keys);
+# VERSION
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(credential));

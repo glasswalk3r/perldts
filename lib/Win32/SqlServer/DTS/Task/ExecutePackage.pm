@@ -62,6 +62,7 @@ use warnings;
 use Carp;
 use base qw(Win32::SqlServer::DTS::Task Class::Accessor);
 use Hash::Util qw(lock_keys);
+# VERSION
 
 =head2 METHODS
 

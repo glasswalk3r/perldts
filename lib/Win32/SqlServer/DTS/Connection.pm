@@ -55,6 +55,7 @@ use Carp;
 use base qw(Class::Accessor Win32::SqlServer::DTS);
 use Win32::OLE qw(in);
 use Hash::Util qw(lock_keys);
+# VERSION
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(

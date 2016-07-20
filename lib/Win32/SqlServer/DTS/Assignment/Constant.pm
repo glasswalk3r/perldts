@@ -55,6 +55,7 @@ use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment);
 use Hash::Util qw(lock_keys);
+# VERSION
 
 =head2 METHODS
 

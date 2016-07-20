@@ -55,6 +55,7 @@ use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment Class::Accessor);
 use Hash::Util qw(lock_keys);
+# VERSION
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(qw(filename section key));

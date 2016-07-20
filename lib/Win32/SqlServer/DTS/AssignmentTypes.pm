@@ -27,6 +27,7 @@ None by default.
 use strict;
 use warnings;
 use Carp qw(confess);
+# VERSION
 
 =head2 METHODS
 

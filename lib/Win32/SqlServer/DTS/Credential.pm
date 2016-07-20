@@ -46,6 +46,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use Hash::Util qw(lock_keys);
+# VERSION
 
 =head2 METHODS
 

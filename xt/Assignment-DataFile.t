@@ -1,6 +1,5 @@
 use warnings;
 use strict;
-
 use Test::More tests => 5;
 use XML::Simple;
 use Win32::SqlServer::DTS::Application;

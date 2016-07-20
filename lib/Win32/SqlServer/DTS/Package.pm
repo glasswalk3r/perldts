@@ -36,6 +36,7 @@ use Win32::SqlServer::DTS::Package::Step;
 use Hash::Util qw(lock_keys);
 use File::Spec;
 use Win32::SqlServer::DTS::TaskTypes;
+# VERSION
 
 __PACKAGE__->follow_best_practice;
 __PACKAGE__->mk_ro_accessors(

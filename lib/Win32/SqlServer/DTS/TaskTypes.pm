@@ -28,6 +28,7 @@ Nothing.
 use strict;
 use warnings;
 use Carp qw(cluck confess);
+# VERSION
 
 our %type_convertion = (
 
@@ -68,22 +69,15 @@ DTSSendMailTask
 =cut
 
 sub convert {
-
     my $type = shift;
-
     confess 'Type is an expected parameter' unless ( defined($type) );
 
     if ( exists( $type_convertion{$type} ) ) {
-
         return $type_convertion{$type};
-
     }
     else {
-
         cluck "type $type is unknow";
-
         return undef;
-
     }
 
 }
@@ -95,9 +89,7 @@ Returns all known task types from Perldts perspective as an array reference.
 =cut
 
 sub get_perl_types {
-
     return [ values(%type_convertion) ];
-
 }
 
 =head3 get_types
@@ -107,9 +99,7 @@ Returns all known task types from MS SQL Server DTS API perspective as an array 
 =cut
 
 sub get_types {
-
     return [ keys(%type_convertion) ];
-
 }
 
 1;

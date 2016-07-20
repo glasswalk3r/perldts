@@ -59,6 +59,7 @@ use strict;
 use warnings;
 use base qw(Win32::SqlServer::DTS::Assignment::Destination);
 use Carp qw(confess);
+# VERSION
 
 =head2 METHODS
 

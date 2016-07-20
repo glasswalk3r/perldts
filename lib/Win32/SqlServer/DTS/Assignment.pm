@@ -31,6 +31,7 @@ use base qw(Win32::SqlServer::DTS);
 use Carp qw(confess);
 use Win32::SqlServer::DTS::AssignmentTypes;
 use Win32::SqlServer::DTS::Assignment::DestinationFactory;
+# VERSION
 
 =head2 METHODS
 
